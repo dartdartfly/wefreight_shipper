@@ -1,4 +1,14 @@
 {
+  "env": {
+    "GMAIL_USER": "your-gmail-username@gmail.com",
+    "GMAIL_APP_PASSWORD": "your-gmail-app-password"
+  },
+  "functions": {
+    "api/**/*.js": {
+      "memory": 128,
+      "maxDuration": 10
+    }
+  },
   "builds": [
     {
       "src": "static-site/index.html",
