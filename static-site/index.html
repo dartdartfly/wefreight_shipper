@@ -425,11 +425,11 @@
                     
                     <div>
                         <label for="sig1-name-title" class="block text-sm font-medium text-gray-700 mb-1"><span data-translate-key="label_name_title">Name and Title</span><span class="text-red-500">*</span></label>
-                        <input type="text" id="sig1-name-title" name="sig1_name_title" data-placeholder-key="ph_printed_name" class="w-full p-2 border-b border-gray-300 focus:border-blue-500" required>
+                        <input type="text" id="sig1-name-title" name="sig1_name_title" data-placeholder-key="ph_printed_name" class="w-full p-2 border-b border-gray-300 focus:border-blue-500">
                     </div>
                     <div>
                         <label for="sig1-date" class="block text-sm font-medium text-gray-700 mb-1"><span data-translate-key="label_date">Date</span><span class="text-red-500">*</span></label>
-                        <input type="date" id="sig1-date" name="sig1_date" class="w-full p-2 border-b border-gray-300 focus:border-blue-500" required>
+                        <input type="date" id="sig1-date" name="sig1_date" class="w-full p-2 border-b border-gray-300 focus:border-blue-500">
                     </div>
                 </div>
 
@@ -520,6 +520,17 @@
             "option_savings": "Savings",
             "option_checking": "Checking",
 
+            "err_required_field": "is required.",
+            "err_business_structure_required": "Business Structure is required.",
+            "err_account_type_bank_required": "Type of account (Bank) is required.",
+            "err_at_least_one_reference": "At least one Business/Trade Reference is required.",
+            "err_signature_1_required": "Signature 1 is required.",
+            "err_sig_1_name_title_required": "Name and Title for Signature 1 is required.",
+            "err_sig_1_date_required": "Date for Signature 1 is required.",
+            "err_sig_2_name_title_required": "Name and Title for Signature 2 is required.",
+            "err_sig_2_date_required": "Date for Signature 2 is required.",
+            "err_correct_errors": "Please correct the following errors:",
+            
             "legend_references": "Business/Trade References (Please provide three)",
             "ref_1_header": "Reference 1",
             "ref_2_header": "Reference 2",
@@ -995,29 +1006,27 @@
             }
         }
 
-        // Signature validation
+        // Signature validation (Signature 1)
         const isSig1Empty = signaturePad1.isEmpty();
-        const isSig2Empty = signaturePad2.isEmpty();
-
         if (isSig1Empty) {
             isValid = false;
             errorMessages.push(translations['err_signature_1_required']);
             document.getElementById('signatureCanvas1').classList.add('border-red-500');
-        } else {
-            // Changed logic: only validate name/title and date if signature 1 is NOT empty
-            if (!document.getElementById('sig1-name-title').value.trim()) {
-                isValid = false;
-                errorMessages.push(translations['err_sig_1_name_title_required']);
-                document.getElementById('sig1-name-title').classList.add('border-red-500');
-            }
-            if (!document.getElementById('sig1-date').value.trim()) {
-                isValid = false;
-                errorMessages.push(translations['err_sig_1_date_required']);
-                document.getElementById('sig1-date').classList.add('border-red-500');
-            }
+        }
+        // Always validate name/title and date for Signature 1, as they are required alongside the signature
+        if (!document.getElementById('sig1-name-title').value.trim()) {
+            isValid = false;
+            errorMessages.push(translations['err_sig_1_name_title_required']);
+            document.getElementById('sig1-name-title').classList.add('border-red-500');
+        }
+        if (!document.getElementById('sig1-date').value.trim()) {
+            isValid = false;
+            errorMessages.push(translations['err_sig_1_date_required']);
+            document.getElementById('sig1-date').classList.add('border-red-500');
         }
 
-        // Changed logic: only validate name/title and date for signature 2 if signature 2 is NOT empty
+        // Signature validation (Signature 2 - optional, only validate if filled)
+        const isSig2Empty = signaturePad2.isEmpty();
         if (!isSig2Empty) {
             if (!document.getElementById('sig2-name-title').value.trim()) {
                 isValid = false;
