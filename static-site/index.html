@@ -977,8 +977,37 @@
         setupSignatureCanvas('signatureCanvas1', 'signatureData1');
         setupSignatureCanvas('signatureCanvas2', 'signatureData2');
         
-        // Apply default language (English) on load
-        const defaultLang = document.getElementById('language-select').value;
+        // --- Auto-detect and set language ---
+        const availableLangs = ['en', 'es', 'zh-Hans', 'zh-Hant'];
+        const browserLang = navigator.language || navigator.userLanguage;
+
+        // Function to find the best match for the browser language
+        const getBestMatch = (lang) => {
+            if (availableLangs.includes(lang)) {
+                return lang;
+            }
+            // Handle cases like 'en-US' -> 'en'
+            const baseLang = lang.split('-')[0];
+            if (availableLangs.includes(baseLang)) {
+                return baseLang;
+            }
+            // Handle Chinese variations
+            if (baseLang === 'zh') {
+                const region = lang.split('-')[1];
+                if (region && (region.toLowerCase() === 'cn' || region.toLowerCase() === 'sg')) {
+                    return 'zh-Hans'; // Simplified
+                }
+                return 'zh-Hant'; // Traditional for other Chinese regions
+            }
+            return 'en'; // Default to English
+        };
+
+        const defaultLang = getBestMatch(browserLang);
+        
+        // Set the dropdown to the detected language
+        document.getElementById('language-select').value = defaultLang;
+        
+        // Translate the page
         translatePage(defaultLang);
     };
 
