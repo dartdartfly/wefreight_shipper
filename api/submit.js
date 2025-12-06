@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
 
         // --- EMAIL CONTENT ---
         let htmlBody = `
-            <h1 style="color: #1e40af;">New Credit Application Received</h1>
+            <h1>New Credit Application Received</h1>
             <p>Here is the submitted data:</p>
             <table style="width: 100%; border-collapse: collapse;">
                 <thead style="background-color: #f4f4f4;">
@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
             htmlBody += `
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;"><strong>${key}</strong></td>
-                    <td style="padding: 8px; border: 1px solid #ddd; color: #1e40af;">`;
+                    <td style="padding: 8px; border: 1px solid #ddd;">`;
             
             if ((key === 'signature_data_1' || key === 'signature_data_2') && value) {
                 const cid = crypto.randomUUID();
