@@ -22,8 +22,15 @@ module.exports = async (req, res) => {
         const attachments = [];
 
         // --- EMAIL CONTENT ---
+        const ip = req.headers['x-forwarded-for'] || 'N/A';
+        const userAgent = req.headers['user-agent'] || 'N/A';
         let htmlBody = `
-            <h1>New Credit Application Received</h1>
+            <h1>New Application Received</h1>
+            <p>
+                <b>Received at:</b> ${new Date().toString()}<br>
+                <b>Applicant IP:</b> ${ip}<br>
+                <b>Applicant Device:</b> ${userAgent}<br>
+            </p>
             <p>Here is the submitted data:</p>
             <table style="width: 100%; border-collapse: collapse;">
                 <thead style="background-color: #f4f4f4;">
@@ -66,7 +73,7 @@ module.exports = async (req, res) => {
         const mailOptions = {
             from: '"Credit App Form" <no-reply@yourdomain.com>', // Sender address
             to: "sloan3165@gmail.com", // List of receivers
-            subject: "New Commercial Credit Application", // Subject line
+            subject: "New Yeti Credit Application", // Subject line
             html: htmlBody,
             attachments: attachments,
         };
