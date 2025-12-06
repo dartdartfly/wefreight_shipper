@@ -9,20 +9,5 @@
       "maxDuration": 10
     }
   },
-  "builds": [
-    {
-      "src": "static-site/index.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/",
-      "dest": "static-site/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "static-site/$1"
-    }
-  ]
+  "public": "static-site"
 }
