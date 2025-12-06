@@ -21,15 +21,37 @@ module.exports = async (req, res) => {
 
 
         // --- EMAIL CONTENT ---
+        // Generate an HTML table from the form data
+        let htmlBody = `
+            <h1>New Credit Application Received</h1>
+            <p>Here is the submitted data:</p>
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead style="background-color: #f4f4f4;">
+                    <tr>
+                        <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Field</th>
+                        <th style="padding: 8px; border: 1px solid #ddd; text-align: left;">Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        for (const [key, value] of Object.entries(data)) {
+            htmlBody += `
+                <tr>
+                    <td style="padding: 8px; border: 1px solid #ddd;"><strong>${key}</strong></td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">${value}</td>
+                </tr>
+            `;
+        }
+        htmlBody += `
+                </tbody>
+            </table>
+        `;
+
         const mailOptions = {
             from: '"Credit App Form" <no-reply@yourdomain.com>', // Sender address
-            to: "aray4702@gmail.com", // List of receivers
+            to: "sloan3165@gmail.com", // List of receivers
             subject: "New Commercial Credit Application", // Subject line
-            html: `
-                <h1>New Credit Application Received</h1>
-                <p>Here is the submitted data:</p>
-                <pre>${JSON.stringify(data, null, 2)}</pre>
-            `
+            html: htmlBody
         };
 
         // --- SEND EMAIL ---
