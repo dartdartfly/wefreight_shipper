@@ -1,5 +1,6 @@
 
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 module.exports = async (req, res) => {
     if (req.method !== 'POST') {
@@ -41,7 +42,7 @@ module.exports = async (req, res) => {
                     <td style="padding: 8px; border: 1px solid #ddd;">`;
             
             if ((key === 'signature_data_1' || key === 'signature_data_2') && value) {
-                const cid = `${key}@submission.com`;
+                const cid = crypto.randomUUID();
                 htmlBody += `<img src="cid:${cid}" alt="Signature" style="width: 200px; height: auto;" />`;
                 attachments.push({
                     filename: `${key}.png`,
