@@ -9,5 +9,14 @@
       "maxDuration": 10
     }
   },
-  "public": "static-site"
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/static-site/$1"
+    }
+  ]
 }
