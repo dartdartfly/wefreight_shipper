@@ -10,18 +10,17 @@ module.exports = async (req, res) => {
         const data = req.body;
 
         // --- NODEMAILER CONFIGURATION ---
-        // It's recommended to use environment variables for security.
         const transporter = nodemailer.createTransport({
             service: 'gmail',
             auth: {
                 user: process.env.GMAIL_USER,
-                pass: process.env.GMAIL_APP_PASSWORD 
-            }
+                pass: process.env.GMAIL_APP_PASSWORD,
+            },
         });
 
+        const attachments = [];
 
         // --- EMAIL CONTENT ---
-        // Generate an HTML table from the form data
         let htmlBody = `
             <h1>New Credit Application Received</h1>
             <p>Here is the submitted data:</p>
@@ -34,6 +33,7 @@ module.exports = async (req, res) => {
                 </thead>
                 <tbody>
         `;
+
         for (const [key, value] of Object.entries(data)) {
             htmlBody += `
                 <tr>
@@ -41,7 +41,13 @@ module.exports = async (req, res) => {
                     <td style="padding: 8px; border: 1px solid #ddd;">`;
             
             if ((key === 'signature_data_1' || key === 'signature_data_2') && value) {
-                htmlBody += `<img src="${value}" alt="Signature" style="width: 200px; height: auto;" />`;
+                const cid = `${key}@submission.com`;
+                htmlBody += `<img src="cid:${cid}" alt="Signature" style="width: 200px; height: auto;" />`;
+                attachments.push({
+                    filename: `${key}.png`,
+                    path: value,
+                    cid,
+                });
             } else {
                 htmlBody += value;
             }
@@ -50,6 +56,7 @@ module.exports = async (req, res) => {
                 </tr>
             `;
         }
+        
         htmlBody += `
                 </tbody>
             </table>
@@ -59,7 +66,8 @@ module.exports = async (req, res) => {
             from: '"Credit App Form" <no-reply@yourdomain.com>', // Sender address
             to: "sloan3165@gmail.com", // List of receivers
             subject: "New Commercial Credit Application", // Subject line
-            html: htmlBody
+            html: htmlBody,
+            attachments: attachments,
         };
 
         // --- SEND EMAIL ---

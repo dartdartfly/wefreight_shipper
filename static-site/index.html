@@ -888,12 +888,12 @@
     document.getElementById('creditApplicationForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        // 1. Get signature data as SVG
+        // 1. Get signature data as PNG
         if (signaturePad1 && !signaturePad1.isEmpty()) {
-            document.getElementById('signatureData1').value = signaturePad1.toDataURL('image/svg+xml');
+            document.getElementById('signatureData1').value = signaturePad1.toDataURL('image/png');
         }
         if (signaturePad2 && !signaturePad2.isEmpty()) {
-            document.getElementById('signatureData2').value = signaturePad2.toDataURL('image/svg+xml');
+            document.getElementById('signatureData2').value = signaturePad2.toDataURL('image/png');
         }
         
         // 2. Collect form data
