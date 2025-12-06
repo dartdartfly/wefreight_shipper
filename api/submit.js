@@ -19,7 +19,6 @@ module.exports = async (req, res) => {
             }
         });
 
-        console.log('user', process.env.GMAIL_USER, 'pass', process.env.GMAIL_APP_PASSWORD)
 
         // --- EMAIL CONTENT ---
         const mailOptions = {
