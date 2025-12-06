@@ -47,6 +47,8 @@
         <p class="text-sm text-gray-500" data-translate-key="app_subtitle">Yeti Logistics, LLC. | Please fill out all sections completely.</p>
     </header>
 
+    <div id="error-message" class="hidden text-sm text-red-700 bg-red-100 border border-red-300 rounded-lg p-4 mb-6" role="alert"></div>
+
     <form id="creditApplicationForm" class="space-y-6">
 
         <!-- BUSINESS CONTACT INFORMATION -->
@@ -59,19 +61,19 @@
                     
                     <!-- 1. Title -->
                     <div>
-                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_title">Title</label>
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_title">Title <span class="text-red-500">*</span></label>
                         <input type="text" id="title" name="title" data-placeholder-key="ph_title" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- 2. Company name -->
                     <div>
-                        <label for="company-name" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_company_name">Company name</label>
+                        <label for="company-name" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_company_name">Company name <span class="text-red-500">*</span></label>
                         <input type="text" id="company-name" name="company_name" data-placeholder-key="ph_company_name" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- 3. Phone | Fax -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_phone_fax">Phone | Fax</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_phone_fax">Phone <span class="text-red-500">*</span> | Fax</label>
                         <div class="grid grid-cols-2 gap-4">
                             <input type="tel" id="phone" name="phone" data-placeholder-key="ph_phone" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                             <input type="tel" id="fax" name="fax" data-placeholder-key="ph_fax" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
@@ -80,16 +82,16 @@
 
                     <!-- 4. E-mail -->
                     <div>
-                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_email">E-mail</label>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_email">E-mail <span class="text-red-500">*</span></label>
                         <input type="email" id="email" name="email" data-placeholder-key="ph_billing_email" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- 5. Registered company address & City, State ZIP Code -->
                     <div class="space-y-4">
-                        <label for="registered-address" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_reg_address">Registered company address</label>
+                        <label for="registered-address" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_reg_address">Registered company address <span class="text-red-500">*</span></label>
                         <input type="text" id="registered-address" name="registered_address" data-placeholder-key="ph_reg_address" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                         
-                        <label for="reg-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_reg_city_zip">City, State ZIP Code</label>
+                        <label for="reg-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_reg_city_zip">City, State ZIP Code <span class="text-red-500">*</span></label>
                         <input type="text" id="reg-city-zip" name="reg_city_zip" data-placeholder-key="ph_reg_city_zip" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     </div>
                 </div>
@@ -98,13 +100,13 @@
                     
                     <!-- 1. Date business commenced -->
                     <div>
-                        <label for="date-commenced" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_date_commenced">Date business commenced</label>
+                        <label for="date-commenced" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_date_commenced">Date business commenced <span class="text-red-500">*</span></label>
                         <input type="date" id="date-commenced" name="date_commenced" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- 2. Business Structure -->
                     <div class="pt-2"> 
-                        <label class="block text-sm font-medium text-gray-700 mb-2" data-translate-key="label_business_structure">Business Structure</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2" data-translate-key="label_business_structure">Business Structure <span class="text-red-500">*</span></label>
                         <div class="flex flex-wrap gap-4 text-sm">
                             <div class="flex items-center">
                                 <input type="radio" id="sole-proprietorship" name="business_structure" value="Sole proprietorship" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
@@ -179,7 +181,7 @@
                     
                     <!-- 1. Bank name -->
                     <div>
-                        <label for="bank-name" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_bank_name">Bank name</label>
+                        <label for="bank-name" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_bank_name">Bank name <span class="text-red-500">*</span></label>
                         <input type="text" id="bank-name" name="bank_name" data-placeholder-key="ph_bank_name" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
@@ -203,13 +205,13 @@
 
                     <!-- 3. Account number -->
                     <div>
-                        <label for="account-number" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_account_number">Account number</label>
+                        <label for="account-number" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_account_number">Account number <span class="text-red-500">*</span></label>
                         <input type="text" id="account-number" name="account_number" data-placeholder-key="ph_account_number" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
                     </div>
 
                     <!-- 4. Type of account - MODIFIED TO RADIO BUTTONS -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_account_type">Type of account</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_account_type">Type of account <span class="text-red-500">*</span></label>
                         <div class="flex flex-wrap gap-4 mt-2">
                             <div class="flex items-center">
                                 <input type="radio" id="bank-savings" name="bank_account_type" value="Savings" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
@@ -231,21 +233,21 @@
 
         <!-- BUSINESS/TRADE REFERENCES -->
         <fieldset class="border border-gray-300 p-6 rounded-lg bg-gray-50">
-            <legend class="text-xl font-semibold text-blue-700 px-3 -ml-3" data-translate-key="legend_references">Business/Trade References (Please provide three)</legend>
+            <legend class="text-xl font-semibold text-blue-700 px-3 -ml-3" data-translate-key="legend_references">Business/Trade References (Please provide three) <span class="text-red-500">*</span></legend>
 
             <!-- Reference 1 -->
             <h3 class="text-lg font-medium text-gray-800 mb-2 mt-4 border-b pb-1" data-translate-key="ref_1_header">Reference 1</h3>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                    <label for="ref1-company" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_company_name">Company name</label>
+                    <label for="ref1-company" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_company_name">Company name <span class="text-red-500">*</span></label>
                     <input type="text" id="ref1-company" name="ref1_company" data-placeholder-key="ph_ref_company" class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
                 <div>
-                    <label for="ref1-phone" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_phone">Phone</label>
+                    <label for="ref1-phone" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_phone">Phone <span class="text-red-500">*</span></label>
                     <input type="tel" id="ref1-phone" name="ref1_phone" data-placeholder-key="ph_ref_phone" class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
                 <div>
-                    <label for="ref1-address" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_address">Address</label>
+                    <label for="ref1-address" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_address">Address <span class="text-red-500">*</span></label>
                     <input type="text" id="ref1-address" name="ref1_address" data-placeholder-key="ph_ref_address" class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
                 <div>
@@ -253,11 +255,11 @@
                     <input type="tel" id="ref1-fax" name="ref1_fax" data-placeholder-key="ph_ref_fax" class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
                 <div>
-                    <label for="ref1-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_ref_city_zip">City, State, ZIP Code and Country</label> 
+                    <label for="ref1-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_ref_city_zip">City, State, ZIP Code and Country <span class="text-red-500">*</span></label> 
                     <input type="text" id="ref1-city-zip" name="ref1_city_zip" data-placeholder-key="ph_ref_city_zip" class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
                 <div>
-                    <label for="ref1-email" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_email">E-mail</label>
+                    <label for="ref1-email" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_email">E-mail <span class="text-red-500">*</span></label>
                     <input type="email" id="ref1-email" name="ref1_email" data-placeholder-key="ph_ref_email" class="w-full p-2 border border-gray-300 rounded-md">
                 </div>
                 
@@ -414,7 +416,7 @@
                         <canvas id="signatureCanvas1" class="signature-canvas w-full" height="100"></canvas>
                         <input type="hidden" id="signatureData1" name="signature_data_1">
                         <div class="flex justify-between items-center text-sm italic text-gray-500 pb-1">
-                            <span data-translate-key="label_signature">Signature</span>
+                            <span data-translate-key="label_signature">Signature <span class="text-red-500">*</span></span>
                             <button type="button" onclick="clearSignature(1)" class="text-xs text-red-500 hover:text-red-700 p-1 rounded transition duration-150" data-translate-key="btn_clear_sig">
                                 Clear Signature
                             </button>
@@ -422,12 +424,12 @@
                     </div>
                     
                     <div>
-                        <label for="sig1-name-title" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_name_title">Name and Title</label>
-                        <input type="text" id="sig1-name-title" name="sig1_name_title" data-placeholder-key="ph_printed_name" class="w-full p-2 border-b border-gray-300 focus:border-blue-500">
+                        <label for="sig1-name-title" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_name_title">Name and Title <span class="text-red-500">*</span></label>
+                        <input type="text" id="sig1-name-title" name="sig1_name_title" data-placeholder-key="ph_printed_name" class="w-full p-2 border-b border-gray-300 focus:border-blue-500" required>
                     </div>
                     <div>
-                        <label for="sig1-date" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_date">Date</label>
-                        <input type="date" id="sig1-date" name="sig1_date" class="w-full p-2 border-b border-gray-300 focus:border-blue-500">
+                        <label for="sig1-date" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_date">Date <span class="text-red-500">*</span></label>
+                        <input type="date" id="sig1-date" name="sig1_date" class="w-full p-2 border-b border-gray-300 focus:border-blue-500" required>
                     </div>
                 </div>
 
@@ -885,8 +887,137 @@
         translatePage(defaultLang);
     };
 
+    function validateForm() {
+        const errorDiv = document.getElementById('error-message');
+        errorDiv.classList.add('hidden');
+        errorDiv.innerHTML = '';
+        let isValid = true;
+        const errorMessages = [];
+
+        // Clear previous error styles
+        document.querySelectorAll('.border-red-500').forEach(el => el.classList.remove('border-red-500'));
+        document.querySelectorAll('.error-radio-group').forEach(el => el.classList.remove('error-radio-group'));
+
+        const requiredFields = {
+            'title': 'Title',
+            'company-name': 'Company name',
+            'phone': 'Phone',
+            'email': 'E-mail',
+            'registered-address': 'Registered company address',
+            'reg-city-zip': 'City, State ZIP Code',
+            'date-commenced': 'Date business commenced',
+            'bank-name': 'Bank name',
+            'account-number': 'Account number'
+        };
+
+        for (const id in requiredFields) {
+            const input = document.getElementById(id);
+            if (input && !input.value.trim()) {
+                isValid = false;
+                input.classList.add('border-red-500');
+                errorMessages.push(`${requiredFields[id]} is required.`);
+            }
+        }
+
+        if (!document.querySelector('input[name="business_structure"]:checked')) {
+            isValid = false;
+            errorMessages.push('Business Structure is required.');
+            document.querySelector('input[name="business_structure"]').closest('.flex-wrap').classList.add('border', 'border-red-500', 'rounded-md', 'p-2');
+        }
+
+        if (!document.querySelector('input[name="bank_account_type"]:checked')) {
+            isValid = false;
+            errorMessages.push('Type of account (Bank) is required.');
+             document.querySelector('input[name="bank_account_type"]').closest('.flex-wrap').classList.add('border', 'border-red-500', 'rounded-md', 'p-2');
+        }
+
+        const ref1Company = document.getElementById('ref1-company').value.trim();
+        const ref2Company = document.getElementById('ref2-company').value.trim();
+        const ref3Company = document.getElementById('ref3-company').value.trim();
+
+        if (!ref1Company && !ref2Company && !ref3Company) {
+            isValid = false;
+            document.getElementById('ref1-company').classList.add('border-red-500');
+            errorMessages.push('At least one Business/Trade Reference is required.');
+        }
+
+        if (ref1Company) {
+            const ref1Required = {
+                'ref1-company': 'Reference 1: Company name',
+                'ref1-phone': 'Reference 1: Phone',
+                'ref1-address': 'Reference 1: Address',
+                'ref1-city-zip': 'Reference 1: City, State, ZIP',
+                'ref1-email': 'Reference 1: E-mail'
+            };
+            for (const id in ref1Required) {
+                const input = document.getElementById(id);
+                if (input && !input.value.trim()) {
+                    isValid = false;
+                    input.classList.add('border-red-500');
+                    errorMessages.push(`${ref1Required[id]} is required.`);
+                }
+            }
+        }
+
+        // Signature validation
+        const isSig1Empty = signaturePad1.isEmpty();
+        const isSig2Empty = signaturePad2.isEmpty();
+
+        if (isSig1Empty) {
+            isValid = false;
+            errorMessages.push('Signature 1 is required.');
+            document.getElementById('signatureCanvas1').classList.add('border-red-500');
+        } else {
+            if (!isSig1Empty) {
+                if (!document.getElementById('sig1-name-title').value.trim()) {
+                    isValid = false;
+                    errorMessages.push('Name and Title for Signature 1 is required.');
+                    document.getElementById('sig1-name-title').classList.add('border-red-500');
+                }
+                if (!document.getElementById('sig1-date').value.trim()) {
+                    isValid = false;
+                    errorMessages.push('Date for Signature 1 is required.');
+                    document.getElementById('sig1-date').classList.add('border-red-500');
+                }
+            }
+            if (!isSig2Empty) {
+                if (!document.getElementById('sig2-name-title').value.trim()) {
+                    isValid = false;
+                    errorMessages.push('Name and Title for Signature 2 is required.');
+                    document.getElementById('sig2-name-title').classList.add('border-red-500');
+                }
+                if (!document.getElementById('sig2-date').value.trim()) {
+                    isValid = false;
+                    errorMessages.push('Date for Signature 2 is required.');
+                    document.getElementById('sig2-date').classList.add('border-red-500');
+                }
+            }
+        }
+
+        if (!isValid) {
+            const uniqueErrors = [...new Set(errorMessages)];
+            errorDiv.innerHTML = '<strong>Please correct the following errors:</strong><ul class="list-disc list-inside mt-2">' + uniqueErrors.map(e => `<li>${e}</li>`).join('') + '</ul>';
+            errorDiv.classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        return isValid;
+    }
+
     document.getElementById('creditApplicationForm').addEventListener('submit', async function(e) {
         e.preventDefault();
+
+        // Clear previous error styles on radio groups before validating
+        document.querySelectorAll('input[name="business_structure"], input[name="bank_account_type"]').forEach(radio => {
+            const group = radio.closest('.flex-wrap');
+            if (group) {
+                group.classList.remove('border', 'border-red-500', 'rounded-md', 'p-2');
+            }
+        });
+
+        if (!validateForm()) {
+            return;
+        }
 
         // 1. Get signature data as PNG
         if (signaturePad1 && !signaturePad1.isEmpty()) {
