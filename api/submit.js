@@ -38,7 +38,15 @@ module.exports = async (req, res) => {
             htmlBody += `
                 <tr>
                     <td style="padding: 8px; border: 1px solid #ddd;"><strong>${key}</strong></td>
-                    <td style="padding: 8px; border: 1px solid #ddd;">${value}</td>
+                    <td style="padding: 8px; border: 1px solid #ddd;">`;
+            
+            if ((key === 'signature_data_1' || key === 'signature_data_2') && value) {
+                htmlBody += `<img src="${value}" alt="Signature" style="width: 200px; height: auto;" />`;
+            } else {
+                htmlBody += value;
+            }
+
+            htmlBody += `</td>
                 </tr>
             `;
         }
