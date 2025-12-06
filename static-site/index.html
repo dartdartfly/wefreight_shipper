@@ -945,16 +945,16 @@
         document.querySelectorAll('.error-radio-group').forEach(el => el.classList.remove('error-radio-group'));
 
         const requiredFields = {
-            'title': 'Title',
-            'company-name': 'Company name',
-            'phone': 'Phone',
-            'fax': 'Fax',
-            'email': 'E-mail',
-            'registered-address': 'Registered company address',
-            'reg-city-zip': 'City, State ZIP Code',
-            'date-commenced': 'Date business commenced',
-            'bank-name': 'Bank name',
-            'account-number': 'Account number'
+            'title': 'label_title',
+            'company-name': 'label_company_name',
+            'phone': 'label_phone', // Assuming 'label_phone' is available
+            'fax': 'label_fax', // Assuming 'label_fax' is available
+            'email': 'label_email',
+            'registered-address': 'label_reg_address',
+            'reg-city-zip': 'label_reg_city_zip',
+            'date-commenced': 'label_date_commenced',
+            'bank-name': 'label_bank_name',
+            'account-number': 'label_account_number'
         };
 
         for (const id in requiredFields) {
@@ -962,7 +962,7 @@
             if (input && !input.value.trim()) {
                 isValid = false;
                 input.classList.add('border-red-500');
-                errorMessages.push(`${requiredFields[id]} ${translations['err_required_field']}`);
+                errorMessages.push(`${translations[requiredFields[id]]} ${translations['err_required_field']}`);
             }
         }
 
