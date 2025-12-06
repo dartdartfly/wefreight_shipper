@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title data-translate-key="title">Credit Application Form</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Add Signature Pad library -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
         /* Custom styles for better readability and a clean, 'document' look */
         body { font-family: 'Inter', sans-serif; background-color: #f4f7f9; }
@@ -413,7 +415,7 @@
                         <input type="hidden" id="signatureData1" name="signature_data_1">
                         <div class="flex justify-between items-center text-sm italic text-gray-500 pb-1">
                             <span data-translate-key="label_signature">Signature</span>
-                            <button type="button" onclick="clearSignature('signatureCanvas1', 'signatureData1')" class="text-xs text-red-500 hover:text-red-700 p-1 rounded transition duration-150" data-translate-key="btn_clear_sig">
+                            <button type="button" onclick="clearSignature(1)" class="text-xs text-red-500 hover:text-red-700 p-1 rounded transition duration-150" data-translate-key="btn_clear_sig">
                                 Clear Signature
                             </button>
                         </div>
@@ -436,7 +438,7 @@
                         <input type="hidden" id="signatureData2" name="signature_data_2">
                         <div class="flex justify-between items-center text-sm italic text-gray-500 pb-1">
                             <span data-translate-key="label_signature">Signature</span>
-                            <button type="button" onclick="clearSignature('signatureCanvas2', 'signatureData2')" class="text-xs text-red-500 hover:text-red-700 p-1 rounded transition duration-150" data-translate-key="btn_clear_sig">
+                            <button type="button" onclick="clearSignature(2)" class="text-xs text-red-500 hover:text-red-700 p-1 rounded transition duration-150" data-translate-key="btn_clear_sig">
                                 Clear Signature
                             </button>
                         </div>
@@ -802,232 +804,97 @@
     };
     
     // --- Translation Logic ---
-
-    /**
-     * Translates the page content based on the selected language.
-     * @param {string} langCode - The ISO code for the target language (e.g., 'en', 'es', 'zh-Hans').
-     */
     window.translatePage = function(langCode) {
         const translations = langData[langCode];
         if (!translations) {
             console.error(`No translation data found for language code: ${langCode}`);
             return;
         }
-
-        // 1. Translate content elements (labels, legends, titles, buttons)
         document.querySelectorAll('[data-translate-key]').forEach(element => {
             const key = element.getAttribute('data-translate-key');
             if (translations[key] !== undefined) {
-                // Use innerHTML for text that contains bold/span tags (like agreement points)
                 element.innerHTML = translations[key];
             }
         });
-
-        // 2. Translate input placeholders
         document.querySelectorAll('[data-placeholder-key]').forEach(input => {
             const key = input.getAttribute('data-placeholder-key');
             if (translations[key] !== undefined) {
                 input.placeholder = translations[key];
             }
         });
-        
-        // 3. Update the HTML lang attribute
         document.documentElement.lang = langCode;
     };
     
-    // --- Signature & Responsive Canvas Logic (from previous version) ---
+    // --- Signature Pad Logic ---
+    let signaturePad1, signaturePad2;
 
-    const PEN_COLOR = 'black';
-    const LINE_WIDTH = 2;
-
-    function setupSignatureCanvas(canvasId, dataInputId) {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-
-        const ctx = canvas.getContext('2d');
-        let drawing = false;
-        let lastX = 0;
-        let lastY = 0;
-
-        ctx.strokeStyle = PEN_COLOR;
-        ctx.lineWidth = LINE_WIDTH;
-        ctx.lineCap = 'round';
-        ctx.lineJoin = 'round';
-
-        const saveSignatureData = () => {
-            const dataInput = document.getElementById(dataInputId);
-            const blankCanvas = document.createElement('canvas');
-            blankCanvas.width = canvas.width;
-            blankCanvas.height = canvas.height;
-            
-            // Check for blank canvas before saving
-            const isBlank = canvas.toDataURL('image/png') === blankCanvas.toDataURL('image/png');
-
-            if (!isBlank) {
-                 dataInput.value = canvas.toDataURL('image/png');
-            } else {
-                 dataInput.value = '';
-            }
-        };
-
-        const resizeCanvas = () => {
-            const parentWidth = canvas.parentElement.offsetWidth;
-            const currentData = canvas.toDataURL();
-            
-            canvas.style.width = parentWidth + 'px';
-            
-            const dpi = window.devicePixelRatio || 1;
-            canvas.width = parentWidth * dpi;
-            canvas.height = 100 * dpi;
-            
-            ctx.scale(dpi, dpi);
-            
-            ctx.strokeStyle = PEN_COLOR;
-            ctx.lineWidth = LINE_WIDTH / dpi; // Adjust line width for scaling
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            
-            if (currentData && currentData.length > 100) {
-                const img = new Image();
-                img.onload = function() {
-                    ctx.drawImage(img, 0, 0, parentWidth, 100);
-                };
-                img.src = currentData;
-            }
-        };
+    function resizeCanvas() {
+        const canvases = [
+            { pad: signaturePad1, el: document.getElementById('signatureCanvas1') },
+            { pad: signaturePad2, el: document.getElementById('signatureCanvas2') }
+        ];
         
-        resizeCanvas();
-
-        const getMousePos = (e) => {
-            const rect = canvas.getBoundingClientRect();
-            let clientX, clientY;
-            
-            if (e.touches && e.touches.length > 0) {
-                clientX = e.touches[0].clientX;
-                clientY = e.touches[0].clientY;
-            } else {
-                clientX = e.clientX;
-                clientY = e.clientY;
+        canvases.forEach(item => {
+            if (item.el && item.pad) {
+                const ratio = Math.max(window.devicePixelRatio || 1, 1);
+                item.el.width = item.el.offsetWidth * ratio;
+                item.el.height = item.el.offsetHeight * ratio;
+                item.el.getContext("2d").scale(ratio, ratio);
+                item.pad.clear(); // Clear and re-draw if necessary
             }
-
-            const dpi = window.devicePixelRatio || 1;
-            return {
-                x: clientX - rect.left,
-                y: clientY - rect.top
-            };
-        };
-        
-        const startDrawing = (e) => {
-            e.preventDefault(); 
-            drawing = true;
-            const { x, y } = getMousePos(e);
-            lastX = x;
-            lastY = y;
-        };
-        
-        const drawLine = (e) => {
-             if (!drawing) return;
-            const { x, y } = getMousePos(e);
-
-            ctx.beginPath();
-            ctx.moveTo(lastX, lastY);
-            ctx.lineTo(x, y);
-            ctx.stroke();
-
-            lastX = x;
-            lastY = y;
-        }
-
-        const stopDrawing = () => {
-            if (drawing) {
-                drawing = false;
-                saveSignatureData();
-            }
-        };
-
-        // Event Listeners
-        canvas.addEventListener('mousedown', startDrawing);
-        canvas.addEventListener('mousemove', drawLine);
-        window.addEventListener('mouseup', stopDrawing);
-
-        canvas.addEventListener('touchstart', startDrawing, { passive: false });
-        canvas.addEventListener('touchmove', drawLine, { passive: false });
-        window.addEventListener('touchend', stopDrawing);
-        window.addEventListener('touchcancel', stopDrawing);
-
-        window.addEventListener('resize', resizeCanvas);
+        });
     }
 
-    window.clearSignature = function(canvasId, dataInputId) {
-        const canvas = document.getElementById(canvasId);
-        const dataInput = document.getElementById(dataInputId);
-        
-        if (canvas) {
-            const ctx = canvas.getContext('2d');
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-        
-        if (dataInput) {
-            dataInput.value = '';
+    window.clearSignature = function(padNumber) {
+        if (padNumber === 1 && signaturePad1) {
+            signaturePad1.clear();
+            document.getElementById('signatureData1').value = '';
+        } else if (padNumber === 2 && signaturePad2) {
+            signaturePad2.clear();
+            document.getElementById('signatureData2').value = '';
         }
     }
 
     window.onload = function() {
-        // Initialize signature canvases
-        setupSignatureCanvas('signatureCanvas1', 'signatureData1');
-        setupSignatureCanvas('signatureCanvas2', 'signatureData2');
+        const canvas1 = document.getElementById('signatureCanvas1');
+        const canvas2 = document.getElementById('signatureCanvas2');
+
+        signaturePad1 = new SignaturePad(canvas1, { penColor: "black" });
+        signaturePad2 = new SignaturePad(canvas2, { penColor: "black" });
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
         
         // --- Auto-detect and set language ---
         const availableLangs = ['en', 'es', 'zh-Hans', 'zh-Hant'];
         const browserLang = navigator.language || navigator.userLanguage;
 
-        // Function to find the best match for the browser language
         const getBestMatch = (lang) => {
-            if (availableLangs.includes(lang)) {
-                return lang;
-            }
-            // Handle cases like 'en-US' -> 'en'
+            if (availableLangs.includes(lang)) return lang;
             const baseLang = lang.split('-')[0];
-            if (availableLangs.includes(baseLang)) {
-                return baseLang;
-            }
-            // Handle Chinese variations
+            if (availableLangs.includes(baseLang)) return baseLang;
             if (baseLang === 'zh') {
                 const region = lang.split('-')[1];
-                if (region && (region.toLowerCase() === 'cn' || region.toLowerCase() === 'sg')) {
-                    return 'zh-Hans'; // Simplified
-                }
-                return 'zh-Hant'; // Traditional for other Chinese regions
+                return (region && (region.toLowerCase() === 'cn' || region.toLowerCase() === 'sg')) ? 'zh-Hans' : 'zh-Hant';
             }
-            return 'en'; // Default to English
+            return 'en';
         };
 
         const defaultLang = getBestMatch(browserLang);
-        
-        // Set the dropdown to the detected language
         document.getElementById('language-select').value = defaultLang;
-        
-        // Translate the page
         translatePage(defaultLang);
     };
 
     document.getElementById('creditApplicationForm').addEventListener('submit', async function(e) {
         e.preventDefault();
 
-        // 1. Final signature data capture on submit
-        const saveFinalSignature = (canvasId, dataInputId) => {
-            const canvas = document.getElementById(canvasId);
-            const dataInput = document.getElementById(dataInputId);
-            if (canvas && dataInput) {
-                const blankCanvas = document.createElement('canvas');
-                blankCanvas.width = canvas.width;
-                blankCanvas.height = canvas.height;
-                const isBlank = canvas.toDataURL('image/png') === blankCanvas.toDataURL('image/png');
-                dataInput.value = isBlank ? '' : canvas.toDataURL('image/png');
-            }
-        };
-        saveFinalSignature('signatureCanvas1', 'signatureData1');
-        saveFinalSignature('signatureCanvas2', 'signatureData2');
+        // 1. Get signature data as SVG
+        if (signaturePad1 && !signaturePad1.isEmpty()) {
+            document.getElementById('signatureData1').value = signaturePad1.toDataURL('image/svg+xml');
+        }
+        if (signaturePad2 && !signaturePad2.isEmpty()) {
+            document.getElementById('signatureData2').value = signaturePad2.toDataURL('image/svg+xml');
+        }
         
         // 2. Collect form data
         const form = e.target;
@@ -1043,7 +910,6 @@
             });
 
             if (response.ok) {
-                // 4. Display success message
                 document.querySelector('.container').innerHTML = `
                     <div class="text-center p-10">
                         <h1 class="text-3xl font-bold text-green-600">Thank You!</h1>
@@ -1054,7 +920,6 @@
                 throw new Error('Server responded with an error.');
             }
         } catch (error) {
-            // 5. Display error message
             console.error('Submission error:', error);
             alert('There was an error submitting your application. Please try again later.');
         }
