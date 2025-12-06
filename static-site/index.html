@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title data-translate-key="title">Credit Application Form</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for better readability and a clean, 'document' look */
+        body { font-family: 'Inter', sans-serif; background-color: #f4f7f9; }
+        .container { 
+            max-width: 900px; 
+            margin: 2rem auto; 
+            background-color: #ffffff; 
+            padding: 2rem; 
+            border-radius: 12px; 
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        /* Style for the signature canvas to mimic a signature line area */
+        .signature-canvas {
+            border: 1px solid #e5e7eb; /* Light gray border */
+            border-bottom: 2px solid #6b7280; /* Darker bottom line for signature effect */
+            cursor: crosshair;
+            background-color: #ffffff;
+            touch-action: none; /* Prevent default touch behavior (like scrolling) */
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    
+    <!-- Language Selector -->
+    <div class="flex justify-end mb-4">
+        <label for="language-select" class="text-sm font-medium text-gray-700 mr-2" data-translate-key="select_language">Select Language:</label>
+        <select id="language-select" onchange="translatePage(this.value)" class="p-1 border border-gray-300 rounded-md text-sm focus:ring-blue-500 focus:border-blue-500">
+            <option value="en">English</option>
+            <option value="es">Español</option>
+            <option value="zh-Hans">简体中文</option>
+            <option value="zh-Hant">繁體中文</option>
+        </select>
+    </div>
+
+    <header class="text-center mb-8 border-b pb-4">
+        <h1 class="text-3xl font-extrabold text-blue-800" data-translate-key="app_title">Commercial Credit Application</h1>
+        <p class="text-sm text-gray-500" data-translate-key="app_subtitle">Yeti Logistics, LLC. | Please fill out all sections completely.</p>
+    </header>
+
+    <form id="creditApplicationForm" action="/submit-application" method="post" class="space-y-6">
+
+        <!-- BUSINESS CONTACT INFORMATION -->
+        <fieldset class="border border-gray-300 p-6 rounded-lg bg-gray-50">
+            <legend class="text-xl font-semibold text-blue-700 px-3 -ml-3" data-translate-key="legend_contact">Business Contact Information</legend>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="space-y-4">
+                    
+                    <!-- 1. Title -->
+                    <div>
+                        <label for="title" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_title">Title</label>
+                        <input type="text" id="title" name="title" data-placeholder-key="ph_title" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 2. Company name -->
+                    <div>
+                        <label for="company-name" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_company_name">Company name</label>
+                        <input type="text" id="company-name" name="company_name" data-placeholder-key="ph_company_name" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 3. Phone | Fax -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_phone_fax">Phone | Fax</label>
+                        <div class="grid grid-cols-2 gap-4">
+                            <input type="tel" id="phone" name="phone" data-placeholder-key="ph_phone" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                            <input type="tel" id="fax" name="fax" data-placeholder-key="ph_fax" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        </div>
+                    </div>
+
+                    <!-- 4. E-mail -->
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_email">E-mail</label>
+                        <input type="email" id="email" name="email" data-placeholder-key="ph_billing_email" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 5. Registered company address & City, State ZIP Code -->
+                    <div class="space-y-4">
+                        <label for="registered-address" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_reg_address">Registered company address</label>
+                        <input type="text" id="registered-address" name="registered_address" data-placeholder-key="ph_reg_address" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                        
+                        <label for="reg-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_reg_city_zip">City, State ZIP Code</label>
+                        <input type="text" id="reg-city-zip" name="reg_city_zip" data-placeholder-key="ph_reg_city_zip" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+                
+                <div class="space-y-4">
+                    
+                    <!-- 1. Date business commenced -->
+                    <div>
+                        <label for="date-commenced" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_date_commenced">Date business commenced</label>
+                        <input type="date" id="date-commenced" name="date_commenced" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 2. Business Structure -->
+                    <div class="pt-2"> 
+                        <label class="block text-sm font-medium text-gray-700 mb-2" data-translate-key="label_business_structure">Business Structure</label>
+                        <div class="flex flex-wrap gap-4 text-sm">
+                            <div class="flex items-center">
+                                <input type="radio" id="sole-proprietorship" name="business_structure" value="Sole proprietorship" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                <label for="sole-proprietorship" class="ml-2 text-gray-700" data-translate-key="option_sole">Sole proprietorship</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="partnership" name="business_structure" value="Partnership" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                <label for="partnership" class="ml-2 text-gray-700" data-translate-key="option_partnership">Partnership</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="corporation" name="business_structure" value="Corporation" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                <label for="corporation" class="ml-2 text-gray-700" data-translate-key="option_corporation">Corporation</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="other-structure" name="business_structure" value="Other" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                <label for="other-structure" class="ml-2 text-gray-700" data-translate-key="option_other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- BUSINESS AND CREDIT INFORMATION -->
+        <fieldset class="border border-gray-300 p-6 rounded-lg bg-gray-50">
+            <legend class="text-xl font-semibold text-blue-700 px-3 -ml-3" data-translate-key="legend_credit">Business and Credit Information</legend>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <!-- LEFT COLUMN: Primary Address and General Info -->
+                <div class="space-y-4">
+                    
+                    <!-- 1. Primary business address of company (Street Address) -->
+                    <div>
+                        <label for="primary-address-street" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_primary_address">Primary business address of company</label>
+                        <input type="text" id="primary-address-street" name="primary_address_street" data-placeholder-key="ph_primary_address" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 2. City, State, ZIP code and country (Location Details) -->
+                    <div>
+                        <label for="primary-address-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_primary_city_zip">City, State, ZIP code and country</label>
+                        <input type="text" id="primary-address-city-zip" name="primary_address_city_zip" data-placeholder-key="ph_primary_city_zip" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 3. How long at current address? -->
+                    <div>
+                        <label for="how-long-address" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_how_long_address">How long at current address?</label>
+                        <input type="text" id="how-long-address" name="how_long_address" data-placeholder-key="ph_how_long_address" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 4. Phone (Secondary/General Business Contact) -->
+                    <div>
+                        <label for="business-secondary-phone" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_general_phone">Phone</label>
+                        <input type="tel" id="business-secondary-phone" name="business_secondary_phone" data-placeholder-key="ph_general_phone" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 5. Fax (Secondary/General Business Contact) -->
+                    <div>
+                        <label for="business-secondary-fax" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_general_fax">Fax</label>
+                        <input type="tel" id="business-secondary-fax" name="business_secondary_fax" data-placeholder-key="ph_general_fax" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 6. E-mail (Secondary/General Business Contact) -->
+                    <div>
+                        <label for="business-secondary-email" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_general_email">E-mail</label>
+                        <input type="email" id="business-secondary-email" name="business_secondary_email" data-placeholder-key="ph_general_email" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+                </div>
+                
+                <!-- RIGHT COLUMN: Bank Information (Consolidated) -->
+                <div class="space-y-4">
+                    
+                    <!-- 1. Bank name -->
+                    <div>
+                        <label for="bank-name" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_bank_name">Bank name</label>
+                        <input type="text" id="bank-name" name="bank_name" data-placeholder-key="ph_bank_name" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 1A. Primary business address of bank (Street Address) -->
+                    <div>
+                        <label for="bank-address-street" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_bank_address">Primary business address of bank</label>
+                        <input type="text" id="bank-address-street" name="bank_address_street" data-placeholder-key="ph_bank_address" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 1B. City, State, ZIP Code and country (Location Details) -->
+                    <div>
+                        <label for="bank-address-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_bank_city_zip">City, State, ZIP Code and country</label>
+                        <input type="text" id="bank-address-city-zip" name="bank_address_city_zip" data-placeholder-key="ph_bank_city_zip" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 2. Phone (Bank) -->
+                    <div>
+                        <label for="bank-phone" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_bank_phone">Phone (Bank)</label>
+                        <input type="tel" id="bank-phone" name="bank_phone" data-placeholder-key="ph_bank_phone" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 3. Account number -->
+                    <div>
+                        <label for="account-number" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_account_number">Account number</label>
+                        <input type="text" id="account-number" name="account_number" data-placeholder-key="ph_account_number" class="w-full p-2 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
+                    </div>
+
+                    <!-- 4. Type of account - MODIFIED TO RADIO BUTTONS -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_account_type">Type of account</label>
+                        <div class="flex flex-wrap gap-4 mt-2">
+                            <div class="flex items-center">
+                                <input type="radio" id="bank-savings" name="bank_account_type" value="Savings" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                <label for="bank-savings" class="ml-2 text-gray-700" data-translate-key="option_savings">Savings</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="bank-checking" name="bank_account_type" value="Checking" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                <label for="bank-checking" class="ml-2 text-gray-700" data-translate-key="option_checking">Checking</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input type="radio" id="bank-other-account" name="bank_account_type" value="Other" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                                <label for="bank-other-account" class="ml-2 text-gray-700" data-translate-key="option_other">Other</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- BUSINESS/TRADE REFERENCES -->
+        <fieldset class="border border-gray-300 p-6 rounded-lg bg-gray-50">
+            <legend class="text-xl font-semibold text-blue-700 px-3 -ml-3" data-translate-key="legend_references">Business/Trade References (Please provide three)</legend>
+
+            <!-- Reference 1 -->
+            <h3 class="text-lg font-medium text-gray-800 mb-2 mt-4 border-b pb-1" data-translate-key="ref_1_header">Reference 1</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="ref1-company" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_company_name">Company name</label>
+                    <input type="text" id="ref1-company" name="ref1_company" data-placeholder-key="ph_ref_company" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref1-phone" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_phone">Phone</label>
+                    <input type="tel" id="ref1-phone" name="ref1_phone" data-placeholder-key="ph_ref_phone" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref1-address" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_address">Address</label>
+                    <input type="text" id="ref1-address" name="ref1_address" data-placeholder-key="ph_ref_address" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref1-fax" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_fax">Fax</label>
+                    <input type="tel" id="ref1-fax" name="ref1_fax" data-placeholder-key="ph_ref_fax" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref1-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_ref_city_zip">City, State, ZIP Code and Country</label> 
+                    <input type="text" id="ref1-city-zip" name="ref1_city_zip" data-placeholder-key="ph_ref_city_zip" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref1-email" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_email">E-mail</label>
+                    <input type="email" id="ref1-email" name="ref1_email" data-placeholder-key="ph_ref_email" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                
+                <!-- Reference 1: Type of account -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_account_type">Type of account</label>
+                    <div class="flex flex-wrap gap-4 mt-2">
+                        <div class="flex items-center">
+                            <input type="radio" id="ref1-radio-savings" name="ref1_account_type" value="Savings" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            <label for="ref1-radio-savings" class="ml-2 text-gray-700" data-translate-key="option_savings">Savings</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="ref1-radio-checking" name="ref1_account_type" value="Checking" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            <label for="ref1-radio-checking" class="ml-2 text-gray-700" data-translate-key="option_checking">Checking</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="ref1-radio-other" name="ref1_account_type" value="Other" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            <label for="ref1-radio-other" class="ml-2 text-gray-700" data-translate-key="option_other">Other</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="ref1-other" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_other_specify">Other (Specify if 'Other')</label>
+                    <input type="text" id="ref1-other" name="ref1_other" data-placeholder-key="ph_ref_other" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+            </div>
+
+            <!-- Reference 2 -->
+            <h3 class="text-lg font-medium text-gray-800 mb-2 mt-6 border-b pb-1" data-translate-key="ref_2_header">Reference 2</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="ref2-company" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_company_name">Company name</label>
+                    <input type="text" id="ref2-company" name="ref2_company" data-placeholder-key="ph_ref_company" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref2-phone" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_phone">Phone</label>
+                    <input type="tel" id="ref2-phone" name="ref2_phone" data-placeholder-key="ph_ref_phone" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref2-address" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_address">Address</label>
+                    <input type="text" id="ref2-address" name="ref2_address" data-placeholder-key="ph_ref_address" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref2-fax" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_fax">Fax</label>
+                    <input type="tel" id="ref2-fax" name="ref2_fax" data-placeholder-key="ph_ref_fax" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref2-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_ref_city_zip">City, State, ZIP Code and Country</label>
+                    <input type="text" id="ref2-city-zip" name="ref2_city_zip" data-placeholder-key="ph_ref_city_zip" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref2-email" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_email">E-mail</label>
+                    <input type="email" id="ref2-email" name="ref2_email" data-placeholder-key="ph_ref_email" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                
+                <!-- Reference 2: Type of account -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_account_type">Type of account</label>
+                    <div class="flex flex-wrap gap-4 mt-2">
+                        <div class="flex items-center">
+                            <input type="radio" id="ref2-radio-savings" name="ref2_account_type" value="Savings" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            <label for="ref2-radio-savings" class="ml-2 text-gray-700" data-translate-key="option_savings">Savings</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="ref2-radio-checking" name="ref2_account_type" value="Checking" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            <label for="ref2-radio-checking" class="ml-2 text-gray-700" data-translate-key="option_checking">Checking</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="ref2-radio-other" name="ref2_account_type" value="Other" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                            <label for="ref2-radio-other" class="ml-2 text-gray-700" data-translate-key="option_other">Other</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div>
+                    <label for="ref2-other" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_other_specify">Other (Specify if 'Other')</label>
+                    <input type="text" id="ref2-other" name="ref2_other" data-placeholder-key="ph_ref_other" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+            </div>
+
+            <!-- Reference 3 -->
+            <h3 class="text-lg font-medium text-gray-800 mb-2 mt-6 border-b pb-1" data-translate-key="ref_3_header">Reference 3</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="ref3-company" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_company_name">Company name</label>
+                    <input type="text" id="ref3-company" name="ref3_company" data-placeholder-key="ph_ref_company" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref3-phone" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_phone">Phone</label>
+                    <input type="tel" id="ref3-phone" name="ref3_phone" data-placeholder-key="ph_ref_phone" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref3-address" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_address">Address</label>
+                    <input type="text" id="ref3-address" name="ref3_address" data-placeholder-key="ph_ref_address" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref3-fax" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_fax">Fax</label>
+                    <input type="tel" id="ref3-fax" name="ref3_fax" data-placeholder-key="ph_ref_fax" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref3-city-zip" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_ref_city_zip">City, State, ZIP Code and Country</label>
+                    <input type="text" id="ref3-city-zip" name="ref3_city_zip" data-placeholder-key="ph_ref_city_zip" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                <div>
+                    <label for="ref3-email" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_email">E-mail</label>
+                    <input type="email" id="ref3-email" name="ref3_email" data-placeholder-key="ph_ref_email" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+                
+                <!-- Reference 3: Type of account -->
+                <div class="col-span-1">
+                    <label class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_account_type">Type of account</label>
+                    <div class="flex gap-4 mt-2">
+                        <div class="flex items-center">
+                            <input type="radio" id="ref3-radio-savings" name="ref3_account_type" value="Savings" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                            <label for="ref3-radio-savings" class="ml-2 text-gray-700" data-translate-key="option_savings">Savings</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="ref3-radio-checking" name="ref3_account_type" value="Checking" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                            <label for="ref3-radio-checking" class="ml-2 text-gray-700" data-translate-key="option_checking">Checking</label>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="radio" id="ref3-radio-other" name="ref3_account_type" value="Other" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded">
+                            <label for="ref3-radio-other" class="ml-2 text-gray-700" data-translate-key="option_other">Other</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-span-1">
+                    <label for="ref3-other" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_other_specify">Other (Specify if 'Other')</label>
+                    <input type="text" id="ref3-other" name="ref3_other" data-placeholder-key="ph_ref_other" class="w-full p-2 border border-gray-300 rounded-md">
+                </div>
+            </div>
+        </fieldset>
+
+        <!-- AGREEMENT -->
+        <fieldset class="border border-gray-300 p-6 rounded-lg bg-red-50">
+            <legend class="text-xl font-semibold text-red-700 px-3 -ml-3" data-translate-key="legend_agreement">Agreement</legend>
+            <div class="text-sm space-y-2 text-gray-700">
+                <p data-translate-key="agreement_1">1. All invoices are to be paid <span class="font-bold">30 days</span> from the date of the invoice.</p>
+                <p data-translate-key="agreement_2">2. Claims arising from invoices must be made within <span class="font-bold">seven working days</span>.</p>
+                <p data-translate-key="agreement_3">3. By submitting this application, you authorize <span class="font-bold">Yeti Logistics, LLC.</span> to make inquiries into the banking and business/trade references that you have supplied.</p>
+            </div>
+        </fieldset>
+        
+        <!-- SIGNATURES -->
+        <fieldset class="border border-gray-300 p-6 rounded-lg bg-gray-50">
+            <legend class="text-xl font-semibold text-blue-700 px-3 -ml-3" data-translate-key="legend_signatures">Signatures</legend>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mt-4">
+                
+                <!-- Applicant 1 Signature -->
+                <div class="space-y-4">
+                    <div class="space-y-1">
+                        <canvas id="signatureCanvas1" class="signature-canvas w-full" height="100"></canvas>
+                        <input type="hidden" id="signatureData1" name="signature_data_1">
+                        <div class="flex justify-between items-center text-sm italic text-gray-500 pb-1">
+                            <span data-translate-key="label_signature">Signature</span>
+                            <button type="button" onclick="clearSignature('signatureCanvas1', 'signatureData1')" class="text-xs text-red-500 hover:text-red-700 p-1 rounded transition duration-150" data-translate-key="btn_clear_sig">
+                                Clear Signature
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="sig1-name-title" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_name_title">Name and Title</label>
+                        <input type="text" id="sig1-name-title" name="sig1_name_title" data-placeholder-key="ph_printed_name" class="w-full p-2 border-b border-gray-300 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="sig1-date" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_date">Date</label>
+                        <input type="date" id="sig1-date" name="sig1_date" class="w-full p-2 border-b border-gray-300 focus:border-blue-500">
+                    </div>
+                </div>
+
+                <!-- Applicant 2 Signature -->
+                <div class="space-y-4">
+                    <div class="space-y-1">
+                        <canvas id="signatureCanvas2" class="signature-canvas w-full" height="100"></canvas>
+                        <input type="hidden" id="signatureData2" name="signature_data_2">
+                        <div class="flex justify-between items-center text-sm italic text-gray-500 pb-1">
+                            <span data-translate-key="label_signature">Signature</span>
+                            <button type="button" onclick="clearSignature('signatureCanvas2', 'signatureData2')" class="text-xs text-red-500 hover:text-red-700 p-1 rounded transition duration-150" data-translate-key="btn_clear_sig">
+                                Clear Signature
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label for="sig2-name-title" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_name_title">Name and Title</label>
+                        <input type="text" id="sig2-name-title" name="sig2_name_title" data-placeholder-key="ph_printed_name_opt" class="w-full p-2 border-b border-gray-300 focus:border-blue-500">
+                    </div>
+                    <div>
+                        <label for="sig2-date" class="block text-sm font-medium text-gray-700 mb-1" data-translate-key="label_date">Date</label>
+                        <input type="date" id="sig2-date" name="sig2_date" class="w-full p-2 border-b border-gray-300 focus:border-blue-500">
+                    </div>
+                </div>
+            </div>
+        </fieldset>
+
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-lg shadow-lg transition duration-200" data-translate-key="btn_submit">
+            Submit Application
+        </button>
+
+    </form>
+</div>
+
+<script>
+    const langData = {
+        "en": {
+            "title": "Credit Application Form",
+            "select_language": "Select Language:",
+            "app_title": "Commercial Credit Application",
+            "app_subtitle": "Yeti Logistics, LLC. | Please fill out all sections completely.",
+            "legend_contact": "Business Contact Information",
+            "label_title": "Title",
+            "ph_title": "e.g., Owner, CEO, Finance Manager",
+            "label_company_name": "Company name",
+            "ph_company_name": "Your Company's Legal Name",
+            "label_phone_fax": "Phone | Fax",
+            "ph_phone": "Phone Number",
+            "ph_fax": "Fax Number",
+            "label_email": "E-mail",
+            "ph_billing_email": "Billing/Contact Email",
+            "label_reg_address": "Registered company address",
+            "ph_reg_address": "Street Address or P.O. Box",
+            "label_reg_city_zip": "City, State ZIP Code",
+            "ph_reg_city_zip": "City, State/Province, ZIP/Postal Code",
+            "label_date_commenced": "Date business commenced",
+            "label_business_structure": "Business Structure",
+            "option_sole": "Sole proprietorship",
+            "option_partnership": "Partnership",
+            "option_corporation": "Corporation",
+            "option_other": "Other",
+
+            "legend_credit": "Business and Credit Information",
+            "label_primary_address": "Primary business address of company",
+            "ph_primary_address": "Street Address, Apt/Suite",
+            "label_primary_city_zip": "City, State, ZIP code and country",
+            "ph_primary_city_zip": "City, State/Province, ZIP/Postal Code, Country",
+            "label_how_long_address": "How long at current address?",
+            "ph_how_long_address": "e.g., 5 Years, 6 Months",
+            "label_general_phone": "Phone",
+            "label_general_fax": "Fax",
+            "label_general_email": "E-mail",
+            "ph_general_phone": "General Business Phone",
+            "ph_general_fax": "General Business Fax",
+            "ph_general_email": "General Business E-mail",
+            "label_bank_name": "Bank name",
+            "ph_bank_name": "e.g., Bank of America, Wells Fargo",
+            "label_bank_address": "Primary business address of bank",
+            "ph_bank_address": "Street Address, Branch Location",
+            "label_bank_city_zip": "City, State, ZIP Code and country",
+            "ph_bank_city_zip": "City, State/Province, ZIP/Postal Code, Country",
+            "label_bank_phone": "Phone (Bank)",
+            "ph_bank_phone": "Bank Phone Number",
+            "label_account_number": "Account number",
+            "ph_account_number": "Account Number (Checking or Savings)",
+            "label_account_type": "Type of account",
+            "option_savings": "Savings",
+            "option_checking": "Checking",
+
+            "legend_references": "Business/Trade References (Please provide three)",
+            "ref_1_header": "Reference 1",
+            "ref_2_header": "Reference 2",
+            "ref_3_header": "Reference 3",
+            "label_phone": "Phone",
+            "label_fax": "Fax",
+            "label_address": "Address",
+            "label_ref_city_zip": "City, State, ZIP Code and Country",
+            "label_other_specify": "Other (Specify if 'Other')",
+            "ph_ref_company": "Reference Company Name",
+            "ph_ref_phone": "e.g., (555) 123-4567",
+            "ph_ref_fax": "e.g., (555) 123-4568",
+            "ph_ref_address": "Reference Street Address",
+            "ph_ref_city_zip": "Reference City, State, ZIP",
+            "ph_ref_email": "contact@reference.com",
+            "ph_ref_other": "e.g., Credit Card, Line of Credit",
+
+            "legend_agreement": "Agreement",
+            "agreement_1": "1. All invoices are to be paid <span class='font-bold'>30 days</span> from the date of the invoice.",
+            "agreement_2": "2. Claims arising from invoices must be made within <span class='font-bold'>seven working days</span>.",
+            "agreement_3": "3. By submitting this application, you authorize <span class='font-bold'>Yeti Logistics, LLC.</span> to make inquiries into the banking and business/trade references that you have supplied.",
+            
+            "legend_signatures": "Signatures",
+            "label_signature": "Signature",
+            "btn_clear_sig": "Clear Signature",
+            "label_name_title": "Name and Title",
+            "label_date": "Date",
+            "ph_printed_name": "Printed Name, Title",
+            "ph_printed_name_opt": "Printed Name, Title (Optional)",
+            "btn_submit": "Submit Application"
+        },
+        "es": {
+            "title": "Formulario de Solicitud de Crédito",
+            "select_language": "Seleccionar Idioma:",
+            "app_title": "Solicitud de Crédito Comercial",
+            "app_subtitle": "Yeti Logistics, LLC. | Por favor, complete todas las secciones.",
+            "legend_contact": "Información de Contacto de la Empresa",
+            "label_title": "Cargo",
+            "ph_title": "Ej: Propietario, CEO, Gerente de Finanzas",
+            "label_company_name": "Nombre de la empresa",
+            "ph_company_name": "Nombre Legal de su Empresa",
+            "label_phone_fax": "Teléfono | Fax",
+            "ph_phone": "Número de Teléfono",
+            "ph_fax": "Número de Fax",
+            "label_email": "Correo electrónico",
+            "ph_billing_email": "Correo electrónico de Facturación/Contacto",
+            "label_reg_address": "Dirección registrada de la empresa",
+            "ph_reg_address": "Dirección o Apartado Postal",
+            "label_reg_city_zip": "Ciudad, Estado y Código Postal",
+            "ph_reg_city_zip": "Ciudad, Estado/Provincia, Código Postal",
+            "label_date_commenced": "Fecha de inicio de actividad",
+            "label_business_structure": "Estructura Empresarial",
+            "option_sole": "Empresa unipersonal",
+            "option_partnership": "Sociedad",
+            "option_corporation": "Corporación",
+            "option_other": "Otro",
+
+            "legend_credit": "Información Comercial y Crediticia",
+            "label_primary_address": "Dirección principal de la empresa",
+            "ph_primary_address": "Dirección, Apartamento/Suite",
+            "label_primary_city_zip": "Ciudad, Estado, código postal y país",
+            "ph_primary_city_zip": "Ciudad, Estado/Provincia, Código Postal, País",
+            "label_how_long_address": "¿Cuánto tiempo lleva en la dirección actual?",
+            "ph_how_long_address": "Ej: 5 Años, 6 Meses",
+            "label_general_phone": "Teléfono",
+            "label_general_fax": "Fax",
+            "label_general_email": "Correo electrónico",
+            "ph_general_phone": "Teléfono Comercial General",
+            "ph_general_fax": "Fax Comercial General",
+            "ph_general_email": "Correo electrónico Comercial General",
+            "label_bank_name": "Nombre del banco",
+            "ph_bank_name": "Ej: Banco de América, Wells Fargo",
+            "label_bank_address": "Dirección principal del banco",
+            "ph_bank_address": "Dirección, Ubicación de la Sucursal",
+            "label_bank_city_zip": "Ciudad, Estado, Código Postal y país",
+            "ph_bank_city_zip": "Ciudad, Estado/Provincia, Código Postal, País",
+            "label_bank_phone": "Teléfono (Banco)",
+            "ph_bank_phone": "Número de Teléfono del Banco",
+            "label_account_number": "Número de cuenta",
+            "ph_account_number": "Número de Cuenta (Corriente o Ahorros)",
+            "label_account_type": "Tipo de cuenta",
+            "option_savings": "Ahorros",
+            "option_checking": "Corriente",
+            
+            "legend_references": "Referencias Comerciales (Proporcione tres)",
+            "ref_1_header": "Referencia 1",
+            "ref_2_header": "Referencia 2",
+            "ref_3_header": "Referencia 3",
+            "label_phone": "Teléfono",
+            "label_fax": "Fax",
+            "label_address": "Dirección",
+            "label_ref_city_zip": "Ciudad, Estado, Código Postal y País",
+            "label_other_specify": "Otro (Especifique si es 'Otro')",
+            "ph_ref_company": "Nombre de la Empresa de Referencia",
+            "ph_ref_phone": "Ej: (555) 123-4567",
+            "ph_ref_fax": "Ej: (555) 123-4568",
+            "ph_ref_address": "Dirección de la Calle de Referencia",
+            "ph_ref_city_zip": "Ciudad, Estado, Código Postal de Referencia",
+            "ph_ref_email": "contacto@referencia.com",
+            "ph_ref_other": "Ej: Tarjeta de Crédito, Línea de Crédito",
+
+            "legend_agreement": "Acuerdo",
+            "agreement_1": "1. Todas las facturas deben pagarse a los <span class='font-bold'>30 días</span> de la fecha de la factura.",
+            "agreement_2": "2. Las reclamaciones derivadas de las facturas deben realizarse dentro de los <span class='font-bold'>siete días hábiles</span>.",
+            "agreement_3": "3. Al enviar esta solicitud, usted autoriza a <span class='font-bold'>Yeti Logistics, LLC.</span> a realizar consultas sobre las referencias bancarias y comerciales/mercantiles que ha proporcionado.",
+            
+            "legend_signatures": "Firmas",
+            "label_signature": "Firma",
+            "btn_clear_sig": "Borrar Firma",
+            "label_name_title": "Nombre y Cargo",
+            "label_date": "Fecha",
+            "ph_printed_name": "Nombre Impreso, Cargo",
+            "ph_printed_name_opt": "Nombre Impreso, Cargo (Opcional)",
+            "btn_submit": "Enviar Solicitud"
+        },
+        "zh-Hans": {
+            "title": "信用申请表",
+            "select_language": "选择语言:",
+            "app_title": "商业信用申请",
+            "app_subtitle": "Yeti Logistics, LLC. | 请完整填写所有部分。",
+            "legend_contact": "企业联系信息",
+            "label_title": "职务",
+            "ph_title": "例如：所有者、CEO、财务经理",
+            "label_company_name": "公司名称",
+            "ph_company_name": "贵公司的法定名称",
+            "label_phone_fax": "电话 | 传真",
+            "ph_phone": "电话号码",
+            "ph_fax": "传真号码",
+            "label_email": "电子邮件",
+            "ph_billing_email": "账单/联系人电子邮件",
+            "label_reg_address": "注册公司地址",
+            "ph_reg_address": "街道地址或邮政信箱",
+            "label_reg_city_zip": "城市、州邮政编码",
+            "ph_reg_city_zip": "城市、州/省、邮政编码",
+            "label_date_commenced": "开始营业日期",
+            "label_business_structure": "业务结构",
+            "option_sole": "个体户",
+            "option_partnership": "合伙企业",
+            "option_corporation": "公司",
+            "option_other": "其他",
+
+            "legend_credit": "商业和信用信息",
+            "label_primary_address": "公司的主要营业地址",
+            "ph_primary_address": "街道地址、公寓/套房",
+            "label_primary_city_zip": "城市、州、邮政编码和国家",
+            "ph_primary_city_zip": "城市、州/省、邮政编码、国家",
+            "label_how_long_address": "在当前地址居住多久了？",
+            "ph_how_long_address": "例如：5 年，6 个月",
+            "label_general_phone": "电话",
+            "label_general_fax": "传真",
+            "label_general_email": "电子邮件",
+            "ph_general_phone": "一般商务电话",
+            "ph_general_fax": "一般商务传真",
+            "ph_general_email": "一般商务电子邮件",
+            "label_bank_name": "银行名称",
+            "ph_bank_name": "例如：美国银行、富国银行",
+            "label_bank_address": "银行的主要营业地址",
+            "ph_bank_address": "街道地址、分行位置",
+            "label_bank_city_zip": "城市、州、邮政编码和国家",
+            "ph_bank_city_zip": "城市、州/省、邮政编码、国家",
+            "label_bank_phone": "电话（银行）",
+            "ph_bank_phone": "银行电话号码",
+            "label_account_number": "账号",
+            "ph_account_number": "账号（支票或储蓄）",
+            "label_account_type": "账户类型",
+            "option_savings": "储蓄",
+            "option_checking": "支票",
+
+            "legend_references": "商业/贸易推荐人（请提供三位）",
+            "ref_1_header": "推荐人 1",
+            "ref_2_header": "推荐人 2",
+            "ref_3_header": "推荐人 3",
+            "label_phone": "电话",
+            "label_fax": "传真",
+            "label_address": "地址",
+            "label_ref_city_zip": "城市、州、邮政编码和国家",
+            "label_other_specify": "其他（如果选择“其他”，请注明）",
+            "ph_ref_company": "推荐人公司名称",
+            "ph_ref_phone": "例如：(555) 123-4567",
+            "ph_ref_fax": "例如：(555) 123-4568",
+            "ph_ref_address": "推荐人街道地址",
+            "ph_ref_city_zip": "推荐人城市、州、邮政编码",
+            "ph_ref_email": "contact@reference.com",
+            "ph_ref_other": "例如：信用卡、信用额度",
+
+            "legend_agreement": "协议",
+            "agreement_1": "1. 所有发票应在发票日期起 <span class='font-bold'>30 天内</span> 付清。",
+            "agreement_2": "2. 因发票引起的索赔必须在 <span class='font-bold'>七个工作日内</span> 提出。",
+            "agreement_3": "3. 提交此申请即表示您授权 <span class='font-bold'>Yeti Logistics, LLC.</span> 对您提供的银行和商业/贸易推荐人进行查询。",
+
+            "legend_signatures": "签名",
+            "label_signature": "签名",
+            "btn_clear_sig": "清除签名",
+            "label_name_title": "姓名和职务",
+            "label_date": "日期",
+            "ph_printed_name": "打印姓名，职务",
+            "ph_printed_name_opt": "打印姓名，职务（可选）",
+            "btn_submit": "提交申请"
+        },
+        "zh-Hant": {
+            "title": "信用申請表",
+            "select_language": "選擇語言:",
+            "app_title": "商業信用申請",
+            "app_subtitle": "Yeti Logistics, LLC. | 請完整填寫所有部分。",
+            "legend_contact": "企業聯絡資訊",
+            "label_title": "職務",
+            "ph_title": "例如：所有者、CEO、財務經理",
+            "label_company_name": "公司名稱",
+            "ph_company_name": "貴公司的法定名稱",
+            "label_phone_fax": "電話 | 傳真",
+            "ph_phone": "電話號碼",
+            "ph_fax": "傳真號碼",
+            "label_email": "電子郵件",
+            "ph_billing_email": "帳單/聯絡人電子郵件",
+            "label_reg_address": "註冊公司地址",
+            "ph_reg_address": "街道地址或郵政信箱",
+            "label_reg_city_zip": "城市、州郵遞區號",
+            "ph_reg_city_zip": "城市、州/省、郵遞區號",
+            "label_date_commenced": "開始營業日期",
+            "label_business_structure": "業務結構",
+            "option_sole": "個體戶",
+            "option_partnership": "合夥企業",
+            "option_corporation": "公司",
+            "option_other": "其他",
+
+            "legend_credit": "商業和信用資訊",
+            "label_primary_address": "公司的主要營業地址",
+            "ph_primary_address": "街道地址、公寓/套房",
+            "label_primary_city_zip": "城市、州、郵遞區號和國家",
+            "ph_primary_city_zip": "城市、州/省、郵遞區號、國家",
+            "label_how_long_address": "在目前地址多久了？",
+            "ph_how_long_address": "例如：5 年，6 個月",
+            "label_general_phone": "電話",
+            "label_general_fax": "傳真",
+            "label_general_email": "電子郵件",
+            "ph_general_phone": "一般商務電話",
+            "ph_general_fax": "一般商務傳真",
+            "ph_general_email": "一般商務電子郵件",
+            "label_bank_name": "銀行名稱",
+            "ph_bank_name": "例如：美國銀行、富國銀行",
+            "label_bank_address": "銀行的主要營業地址",
+            "ph_bank_address": "街道地址、分行位置",
+            "label_bank_city_zip": "城市、州、郵遞區號和國家",
+            "ph_bank_city_zip": "城市、州/省、郵遞區號、國家",
+            "label_bank_phone": "電話（銀行）",
+            "ph_bank_phone": "銀行電話號碼",
+            "label_account_number": "帳號",
+            "ph_account_number": "帳號（支票或儲蓄）",
+            "label_account_type": "帳戶類型",
+            "option_savings": "儲蓄",
+            "option_checking": "支票",
+
+            "legend_references": "商業/貿易推薦人（請提供三位）",
+            "ref_1_header": "推薦人 1",
+            "ref_2_header": "推薦人 2",
+            "ref_3_header": "推薦人 3",
+            "label_phone": "電話",
+            "label_fax": "傳真",
+            "label_address": "地址",
+            "label_ref_city_zip": "城市、州、郵遞區號和國家",
+            "label_other_specify": "其他（如果選擇“其他”，請註明）",
+            "ph_ref_company": "推薦人公司名稱",
+            "ph_ref_phone": "例如：(555) 123-4567",
+            "ph_ref_fax": "例如：(555) 123-4568",
+            "ph_ref_address": "推薦人街道地址",
+            "ph_ref_city_zip": "推薦人城市、州、郵遞區號",
+            "ph_ref_email": "contact@reference.com",
+            "ph_ref_other": "例如：信用卡、信用額度",
+
+            "legend_agreement": "協議",
+            "agreement_1": "1. 所有發票應在發票日期起 <span class='font-bold'>30 天內</span> 付清。",
+            "agreement_2": "2. 因發票引起的索賠必須在 <span class='font-bold'>七個工作日內</span> 提出。",
+            "agreement_3": "3. 提交此申請即表示您授權 <span class='font-bold'>Yeti Logistics, LLC.</span> 對您提供的銀行和商業/貿易推薦人進行查詢。",
+
+            "legend_signatures": "簽名",
+            "label_signature": "簽名",
+            "btn_clear_sig": "清除簽名",
+            "label_name_title": "姓名和職務",
+            "label_date": "日期",
+            "ph_printed_name": "打印姓名，職務",
+            "ph_printed_name_opt": "打印姓名，職務（可選）",
+            "btn_submit": "提交申請"
+        }
+    };
+    
+    // --- Translation Logic ---
+
+    /**
+     * Translates the page content based on the selected language.
+     * @param {string} langCode - The ISO code for the target language (e.g., 'en', 'es', 'zh-Hans').
+     */
+    window.translatePage = function(langCode) {
+        const translations = langData[langCode];
+        if (!translations) {
+            console.error(`No translation data found for language code: ${langCode}`);
+            return;
+        }
+
+        // 1. Translate content elements (labels, legends, titles, buttons)
+        document.querySelectorAll('[data-translate-key]').forEach(element => {
+            const key = element.getAttribute('data-translate-key');
+            if (translations[key] !== undefined) {
+                // Use innerHTML for text that contains bold/span tags (like agreement points)
+                element.innerHTML = translations[key];
+            }
+        });
+
+        // 2. Translate input placeholders
+        document.querySelectorAll('[data-placeholder-key]').forEach(input => {
+            const key = input.getAttribute('data-placeholder-key');
+            if (translations[key] !== undefined) {
+                input.placeholder = translations[key];
+            }
+        });
+        
+        // 3. Update the HTML lang attribute
+        document.documentElement.lang = langCode;
+    };
+    
+    // --- Signature & Responsive Canvas Logic (from previous version) ---
+
+    const PEN_COLOR = 'black';
+    const LINE_WIDTH = 2;
+
+    function setupSignatureCanvas(canvasId, dataInputId) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+
+        const ctx = canvas.getContext('2d');
+        let drawing = false;
+        let lastX = 0;
+        let lastY = 0;
+
+        ctx.strokeStyle = PEN_COLOR;
+        ctx.lineWidth = LINE_WIDTH;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+
+        const saveSignatureData = () => {
+            const dataInput = document.getElementById(dataInputId);
+            const blankCanvas = document.createElement('canvas');
+            blankCanvas.width = canvas.width;
+            blankCanvas.height = canvas.height;
+            
+            // Check for blank canvas before saving
+            const isBlank = canvas.toDataURL('image/png') === blankCanvas.toDataURL('image/png');
+
+            if (!isBlank) {
+                 dataInput.value = canvas.toDataURL('image/png');
+            } else {
+                 dataInput.value = '';
+            }
+        };
+
+        const resizeCanvas = () => {
+            const parentWidth = canvas.parentElement.offsetWidth;
+            const currentData = canvas.toDataURL();
+            
+            canvas.style.width = parentWidth + 'px';
+            
+            const dpi = window.devicePixelRatio || 1;
+            canvas.width = parentWidth * dpi;
+            canvas.height = 100 * dpi;
+            
+            ctx.scale(dpi, dpi);
+            
+            ctx.strokeStyle = PEN_COLOR;
+            ctx.lineWidth = LINE_WIDTH / dpi; // Adjust line width for scaling
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            if (currentData && currentData.length > 100) {
+                const img = new Image();
+                img.onload = function() {
+                    ctx.drawImage(img, 0, 0, parentWidth, 100);
+                };
+                img.src = currentData;
+            }
+        };
+        
+        resizeCanvas();
+
+        const getMousePos = (e) => {
+            const rect = canvas.getBoundingClientRect();
+            let clientX, clientY;
+            
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+
+            const dpi = window.devicePixelRatio || 1;
+            return {
+                x: clientX - rect.left,
+                y: clientY - rect.top
+            };
+        };
+        
+        const startDrawing = (e) => {
+            e.preventDefault(); 
+            drawing = true;
+            const { x, y } = getMousePos(e);
+            lastX = x;
+            lastY = y;
+        };
+        
+        const drawLine = (e) => {
+             if (!drawing) return;
+            const { x, y } = getMousePos(e);
+
+            ctx.beginPath();
+            ctx.moveTo(lastX, lastY);
+            ctx.lineTo(x, y);
+            ctx.stroke();
+
+            lastX = x;
+            lastY = y;
+        }
+
+        const stopDrawing = () => {
+            if (drawing) {
+                drawing = false;
+                saveSignatureData();
+            }
+        };
+
+        // Event Listeners
+        canvas.addEventListener('mousedown', startDrawing);
+        canvas.addEventListener('mousemove', drawLine);
+        window.addEventListener('mouseup', stopDrawing);
+
+        canvas.addEventListener('touchstart', startDrawing, { passive: false });
+        canvas.addEventListener('touchmove', drawLine, { passive: false });
+        window.addEventListener('touchend', stopDrawing);
+        window.addEventListener('touchcancel', stopDrawing);
+
+        window.addEventListener('resize', resizeCanvas);
+    }
+
+    window.clearSignature = function(canvasId, dataInputId) {
+        const canvas = document.getElementById(canvasId);
+        const dataInput = document.getElementById(dataInputId);
+        
+        if (canvas) {
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        if (dataInput) {
+            dataInput.value = '';
+        }
+    }
+
+    window.onload = function() {
+        // Initialize signature canvases
+        setupSignatureCanvas('signatureCanvas1', 'signatureData1');
+        setupSignatureCanvas('signatureCanvas2', 'signatureData2');
+        
+        // Apply default language (English) on load
+        const defaultLang = document.getElementById('language-select').value;
+        translatePage(defaultLang);
+    };
+
+    document.getElementById('creditApplicationForm').addEventListener('submit', function(e) {
+        // Final signature data capture on submit
+        const saveFinalSignature = (canvasId, dataInputId) => {
+            const canvas = document.getElementById(canvasId);
+            const dataInput = document.getElementById(dataInputId);
+            if (canvas && dataInput) {
+                const blankCanvas = document.createElement('canvas');
+                blankCanvas.width = canvas.width;
+                blankCanvas.height = canvas.height;
+                const isBlank = canvas.toDataURL('image/png') === blankCanvas.toDataURL('image/png');
+                dataInput.value = isBlank ? '' : canvas.toDataURL('image/png');
+            }
+        };
+        saveFinalSignature('signatureCanvas1', 'signatureData1');
+        saveFinalSignature('signatureCanvas2', 'signatureData2');
+    });
+
+</script>
+</body>
+</html>
