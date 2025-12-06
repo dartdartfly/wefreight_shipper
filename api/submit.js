@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
 
         const mailOptions = {
             from: '"Credit App Form" <no-reply@yourdomain.com>', // Sender address
-            to: "sloan3165@gmail.com", // List of receivers
+            to: process.env.EMAIL_RECIPIENTS, // List of receivers
             subject: "New Yeti Credit Application", // Subject line
             html: htmlBody,
             attachments: attachments,
