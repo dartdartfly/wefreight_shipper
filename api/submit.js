@@ -43,7 +43,7 @@ module.exports = async (req, res) => {
             
             if ((key === 'signature_data_1' || key === 'signature_data_2') && value) {
                 const cid = crypto.randomUUID();
-                htmlBody += `<img src="cid:${cid}" alt="Signature" style="width: 200px; height: auto;" />`;
+                htmlBody += `<div style="background-color: #1e40af; display: inline-block;"><img src="cid:${cid}" alt="Signature" style="width: 200px; height: auto; filter: invert(1);" /></div>`;
                 attachments.push({
                     filename: `${key}.png`,
                     path: value,
