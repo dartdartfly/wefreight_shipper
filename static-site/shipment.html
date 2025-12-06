@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>货运追踪仪表板</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+    </style>
+</head>
+<body class="p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto bg-white p-6 md:p-10 rounded-xl shadow-2xl">
+        <h1 class="text-3xl font-extrabold text-gray-900 mb-6 border-b-2 pb-2 text-center">
+            货运追踪系统
+        </h1>
+
+        <!-- 搜索区域 -->
+        <div class="flex flex-col sm:flex-row gap-4 mb-8 p-4 bg-gray-50 rounded-lg shadow-inner">
+            <!-- 提示用户输入H列中的值进行搜索 -->
+            <input type="text" id="shipmentInput" placeholder="请输入 H 列中的货运号进行查询"
+                   class="flex-grow p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-gray-700 placeholder-gray-400 text-sm"
+                   required>
+            <button id="searchButton" 
+                    class="w-full sm:w-auto px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-150 ease-in-out">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                查询
+            </button>
+        </div>
+
+        <!-- 结果显示区域 -->
+        <div id="resultsContainer" class="min-h-[100px] flex items-center justify-center text-gray-500">
+            请在上方输入货运号并点击查询。
+        </div>
+
+    </div>
+
+    <script>
+        // 字段中文名到英文键的映射
+        const fieldMap = {
+            '客户': 'client',
+            '描述': 'description',
+            '货车类型': 'truckType',
+            '提一地址': 'pickupAddress1',
+            '卸一地址': 'dropoffAddress1',
+            '卸二地址': 'dropoffAddress2',
+            '提货号': 'pickupNumber',
+            '货运号': 'shipmentNumber',
+            '提一时间': 'pickupTime1',
+            '卸一时间': 'dropoffTime1',
+            '卸二时间': 'dropoffTime2',
+            '货运公司': 'carrierCompany',
+            'VIN': 'vin',
+            '负责人': 'personInCharge',
+            '状态': 'status'
+        };
+
+        const resultsContainer = document.getElementById('resultsContainer');
+        const inputField = document.getElementById('shipmentInput');
+        const searchButton = document.getElementById('searchButton');
+        
+        // 您的 API 密钥
+        const PROXY_SECRET = 'juxie_nashville_0705';
+        // 基础 URL，用于后续动态构建 Range
+        const BASE_SHEET_URL = 'https://googlesheetproxy.vercel.app/?id=1kdUz9S6ie0t1K8-bXzis5E1dmc8s0UstTTgbSceLwoA&range=sampletab!';
+
+        /**
+         * 从 Web API 异步获取货运数据。
+         * 流程：1. 查找货运号所在的行号 (H:H) -> 2. 仅下载该行数据 (A<index>:O<index>)
+         * @param {string} shipmentNumber - 用户输入的货运号
+         * @returns {Promise<Object|undefined>} 匹配到的数据对象
+         */
+        async function fetchShipmentData(shipmentNumber) {
+            const normalizedQuery = shipmentNumber.toUpperCase().trim();
+
+            // 1. 第一次 API 调用：获取 H 列所有值 (包括 H1 头部)
+            const indexFetchUrl = `${BASE_SHEET_URL}H:H&format=matrix`;
+            
+            const indexResponse = await fetch(indexFetchUrl, {
+                headers: { 'x-proxy-secret': PROXY_SECRET }
+            });
+
+            if (!indexResponse.ok) {
+                throw new Error(`索引 API 请求失败，状态码: ${indexResponse.status}`);
+            }
+            const indexResult = await indexResponse.json();
+            
+            if (!indexResult.ok || !indexResult.values) {
+                throw new Error('接收到无效的索引数据结构。');
+            }
+
+            const hColumn = indexResult.values; // 例如：[['货运号'], [''], ['HS00055271'], ['']]
+            let targetRowIndex = -1; 
+            
+            // 从索引 1 开始搜索 (对应表格的第 2 行，即第一条数据)
+            for (let i = 1; i < hColumn.length; i++) {
+                // 取 H 列的当前行值 (hColumn[i][0])
+                const value = (hColumn[i][0] || '').toUpperCase().trim();
+                
+                if (value === normalizedQuery) {
+                    // 找到匹配项。表格行号 = 数组索引 + 1 (因为数组索引 0 对应 H1 头部)
+                    targetRowIndex = i + 1; 
+                    break;
+                }
+            }
+
+            if (targetRowIndex === -1) {
+                // 未找到匹配项
+                return undefined;
+            }
+
+            // 2. 第二次 API 调用：获取特定行 A<index>:O<index> 的数据
+            const dataFetchUrl = `${BASE_SHEET_URL}A${targetRowIndex}:O${targetRowIndex}&format=matrix`;
+            const dataResponse = await fetch(dataFetchUrl, {
+                headers: { 'x-proxy-secret': PROXY_SECRET }
+            });
+            
+            if (!dataResponse.ok) {
+                throw new Error(`数据 API 请求失败，状态码: ${dataResponse.status}`);
+            }
+            const dataResult = await dataResponse.json();
+            
+            if (!dataResult.ok || !dataResult.values || dataResult.values.length === 0) {
+                 throw new Error('接收到无效的行数据结构。');
+            }
+
+            const rowData = dataResult.values[0]; // 结果是单行矩阵，取第一个元素
+
+            // 3. 转换行数据为对象格式
+            return {
+                client: rowData[0] || 'N/A',
+                description: rowData[1] || 'N/A',
+                truckType: rowData[2] || 'N/A',
+                pickupAddress1: rowData[3] || 'N/A',
+                dropoffAddress1: rowData[4] || 'N/A',
+                dropoffAddress2: rowData[5] || 'N/A',
+                pickupNumber: rowData[6] || 'N/A',
+                // H列 (rowData[7]) 才是真正的 Shipment Number，使用它作为显示值
+                shipmentNumber: rowData[7] || 'N/A', 
+                pickupTime1: rowData[8] || 'N/A',
+                dropoffTime1: rowData[9] || 'N/A',
+                dropoffTime2: rowData[10] || 'N/A',
+                carrierCompany: rowData[11] || 'N/A',
+                vin: rowData[12] || 'N/A',
+                personInCharge: rowData[13] || 'N/A',
+                status: rowData[14] || 'N/A',
+            };
+        }
+
+        /**
+         * 渲染结果到页面
+         * @param {Object|undefined} data - 搜索到的数据
+         */
+        function renderResults(data) {
+            // 清除居中类，准备渲染结果
+            resultsContainer.classList.remove('justify-center', 'items-center', 'text-gray-500');
+            resultsContainer.classList.add('flex', 'flex-col', 'items-center', 'text-center');
+
+            if (!data) {
+                resultsContainer.innerHTML = `
+                    <div class="text-center p-8 bg-red-50 rounded-lg border border-red-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-red-500 mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                        <p class="font-semibold text-red-700">未找到匹配的货运信息。</p>
+                        <p class="text-sm text-red-500 mt-1">请检查货运号是否正确。</p>
+                    </div>
+                `;
+                return;
+            }
+
+            // 构造状态标签的样式
+            let statusColor = 'bg-gray-200 text-gray-800';
+            if (data.status === 'DISPATCHED') {
+                statusColor = 'bg-blue-100 text-blue-800';
+            } else if (data.status === 'NEED RATE CON') {
+                statusColor = 'bg-yellow-100 text-yellow-800';
+            } else if (data.status === 'PENDING') {
+                statusColor = 'bg-gray-100 text-gray-500';
+            }
+
+            let htmlContent = `
+                <div class="space-y-6 w-full">
+                    <div class="p-6 bg-white rounded-xl border border-gray-200 shadow-lg">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 border-b pb-4">
+                            <h2 class="text-2xl font-bold text-gray-800">
+                                追踪号：<span class="text-blue-600">${data.shipmentNumber}</span>
+                            </h2>
+                            <span class="mt-2 sm:mt-0 px-3 py-1 ${statusColor} text-xs font-bold rounded-full uppercase">
+                                状态: ${data.status}
+                            </span>
+                        </div>
+                        
+                        <!-- 主要信息网格 -->
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+                            ${Object.keys(fieldMap).map(key => {
+                                const enKey = fieldMap[key];
+                                // 跳过作为标题的 key
+                                if (enKey === 'shipmentNumber' || enKey === 'status') return ''; 
+                                
+                                const value = data[enKey] || 'N/A';
+                                const isAddress = enKey.includes('Address') || enKey === 'description' || enKey === 'carrierCompany';
+                                
+                                return `
+                                    <div class="flex flex-col text-left">
+                                        <span class="font-medium text-gray-500">${key}</span>
+                                        <span class="text-gray-800 font-semibold ${isAddress ? 'whitespace-pre-wrap' : ''}">${value}</span>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                        
+                    </div>
+                </div>
+            `;
+            
+            resultsContainer.innerHTML = htmlContent;
+        }
+
+        // 按钮点击事件处理
+        searchButton.addEventListener('click', async () => {
+            const query = inputField.value;
+            if (!query) {
+                // 如果输入为空，则显示提示信息
+                resultsContainer.innerHTML = `<p class="text-red-500">请输入货运号。</p>`;
+                return;
+            }
+            
+            // 禁用按钮并显示加载状态
+            searchButton.disabled = true;
+            searchButton.classList.add('opacity-50');
+            resultsContainer.classList.add('justify-center', 'items-center', 'flex');
+            resultsContainer.innerHTML = `
+                <div class="flex items-center space-x-2 text-blue-600">
+                    <svg class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span>正在查询货运信息...</span>
+                </div>
+            `;
+
+            try {
+                // 尝试从 API 获取数据
+                const foundData = await fetchShipmentData(query);
+                renderResults(foundData);
+            } catch (error) {
+                // 处理 API 调用失败的情况
+                console.error("查询货运数据时发生错误:", error);
+                resultsContainer.innerHTML = `
+                    <div class="text-center p-8 bg-red-100 rounded-lg border border-red-300 text-red-700">
+                        <p class="font-semibold">查询失败</p>
+                        <p class="text-sm">无法连接到数据源或服务器错误。请检查控制台获取详细信息。</p>
+                    </div>
+                `;
+            } finally {
+                // 重新启用按钮
+                searchButton.disabled = false;
+                searchButton.classList.remove('opacity-50');
+            }
+        });
+        
+        // 允许按 Enter 键搜索
+        inputField.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchButton.click();
+            }
+        });
+
+        // 默认显示提示信息
+        resultsContainer.innerHTML = `<p class="text-gray-500 mt-4">请在上方输入货运号并点击查询。</p>`;
+
+    </script>
+</body>
+</html>
