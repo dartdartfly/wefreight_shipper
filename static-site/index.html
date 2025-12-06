@@ -604,6 +604,17 @@
             "option_savings": "Ahorros",
             "option_checking": "Corriente",
             
+            "err_required_field": "es obligatorio.",
+            "err_business_structure_required": "La estructura empresarial es obligatoria.",
+            "err_account_type_bank_required": "El tipo de cuenta bancaria es obligatorio.",
+            "err_at_least_one_reference": "Se requiere al menos una referencia comercial/profesional.",
+            "err_signature_1_required": "La firma 1 es obligatoria.",
+            "err_sig_1_name_title_required": "El nombre y cargo de la firma 1 son obligatorios.",
+            "err_sig_1_date_required": "La fecha de la firma 1 es obligatoria.",
+            "err_sig_2_name_title_required": "El nombre y cargo de la firma 2 son obligatorios.",
+            "err_sig_2_date_required": "La fecha de la firma 2 es obligatoria.",
+            "err_correct_errors": "Por favor, corrija los siguientes errores:",
+
             "legend_references": "Referencias Comerciales (Proporcione tres)",
             "ref_1_header": "Referencia 1",
             "ref_2_header": "Referencia 2",
@@ -705,6 +716,17 @@
             "ph_ref_email": "contact@reference.com",
             "ph_ref_other": "例如：信用卡、信用额度",
 
+            "err_required_field": "为必填项。",
+            "err_business_structure_required": "业务结构为必填项。",
+            "err_account_type_bank_required": "银行账户类型为必填项。",
+            "err_at_least_one_reference": "至少需要一个商业/贸易推荐人。",
+            "err_signature_1_required": "签名 1 为必填项。",
+            "err_sig_1_name_title_required": "签名 1 的姓名和职务为必填项。",
+            "err_sig_1_date_required": "签名 1 的日期为必填项。",
+            "err_sig_2_name_title_required": "签名 2 的姓名和职务为必填项。",
+            "err_sig_2_date_required": "签名 2 的日期为必填项。",
+            "err_correct_errors": "请更正以下错误：",
+
             "legend_agreement": "协议",
             "agreement_1": "1. 所有发票应在发票日期起 <span class='font-bold'>30 天内</span> 付清。",
             "agreement_2": "2. 因发票引起的索赔必须在 <span class='font-bold'>七个工作日内</span> 提出。",
@@ -788,6 +810,17 @@
             "ph_ref_city_zip": "推薦人城市、州、郵遞區號",
             "ph_ref_email": "contact@reference.com",
             "ph_ref_other": "例如：信用卡、信用額度",
+
+            "err_required_field": "為必填項。",
+            "err_business_structure_required": "業務結構為必填項。",
+            "err_account_type_bank_required": "銀行帳戶類型為必填項。",
+            "err_at_least_one_reference": "至少需要一個商業/貿易推薦人。",
+            "err_signature_1_required": "簽名 1 為必填項。",
+            "err_sig_1_name_title_required": "簽名 1 的姓名和職務為必填項。",
+            "err_sig_1_date_required": "簽名 1 的日期為必填項。",
+            "err_sig_2_name_title_required": "簽名 2 的姓名和職務為必填項。",
+            "err_sig_2_date_required": "簽名 2 的日期為必填項。",
+            "err_correct_errors": "請更正以下錯誤：",
 
             "legend_agreement": "協議",
             "agreement_1": "1. 所有發票應在發票日期起 <span class='font-bold'>30 天內</span> 付清。",
@@ -888,6 +921,8 @@
     };
 
     function validateForm() {
+        const currentLang = document.getElementById('language-select').value;
+        const translations = langData[currentLang];
         const errorDiv = document.getElementById('error-message');
         errorDiv.classList.add('hidden');
         errorDiv.innerHTML = '';
@@ -916,19 +951,19 @@
             if (input && !input.value.trim()) {
                 isValid = false;
                 input.classList.add('border-red-500');
-                errorMessages.push(`${requiredFields[id]} is required.`);
+                errorMessages.push(`${requiredFields[id]} ${translations['err_required_field']}`);
             }
         }
 
         if (!document.querySelector('input[name="business_structure"]:checked')) {
             isValid = false;
-            errorMessages.push('Business Structure is required.');
+            errorMessages.push(translations['err_business_structure_required']);
             document.querySelector('input[name="business_structure"]').closest('.flex-wrap').classList.add('border', 'border-red-500', 'rounded-md', 'p-2');
         }
 
         if (!document.querySelector('input[name="bank_account_type"]:checked')) {
             isValid = false;
-            errorMessages.push('Type of account (Bank) is required.');
+            errorMessages.push(translations['err_account_type_bank_required']);
              document.querySelector('input[name="bank_account_type"]').closest('.flex-wrap').classList.add('border', 'border-red-500', 'rounded-md', 'p-2');
         }
 
@@ -939,23 +974,23 @@
         if (!ref1Company && !ref2Company && !ref3Company) {
             isValid = false;
             document.getElementById('ref1-company').classList.add('border-red-500');
-            errorMessages.push('At least one Business/Trade Reference is required.');
+            errorMessages.push(translations['err_at_least_one_reference']);
         }
 
         if (ref1Company) {
             const ref1Required = {
-                'ref1-company': 'Reference 1: Company name',
-                'ref1-phone': 'Reference 1: Phone',
-                'ref1-address': 'Reference 1: Address',
-                'ref1-city-zip': 'Reference 1: City, State, ZIP',
-                'ref1-email': 'Reference 1: E-mail'
+                'ref1-company': translations['label_company_name'],
+                'ref1-phone': translations['label_phone'],
+                'ref1-address': translations['label_address'],
+                'ref1-city-zip': translations['label_ref_city_zip'],
+                'ref1-email': translations['label_email']
             };
             for (const id in ref1Required) {
                 const input = document.getElementById(id);
                 if (input && !input.value.trim()) {
                     isValid = false;
                     input.classList.add('border-red-500');
-                    errorMessages.push(`${ref1Required[id]} is required.`);
+                    errorMessages.push(`${ref1Required[id]} ${translations['err_required_field']}`);
                 }
             }
         }
@@ -966,38 +1001,39 @@
 
         if (isSig1Empty) {
             isValid = false;
-            errorMessages.push('Signature 1 is required.');
+            errorMessages.push(translations['err_signature_1_required']);
             document.getElementById('signatureCanvas1').classList.add('border-red-500');
         } else {
-            if (!isSig1Empty) {
-                if (!document.getElementById('sig1-name-title').value.trim()) {
-                    isValid = false;
-                    errorMessages.push('Name and Title for Signature 1 is required.');
-                    document.getElementById('sig1-name-title').classList.add('border-red-500');
-                }
-                if (!document.getElementById('sig1-date').value.trim()) {
-                    isValid = false;
-                    errorMessages.push('Date for Signature 1 is required.');
-                    document.getElementById('sig1-date').classList.add('border-red-500');
-                }
+            // Changed logic: only validate name/title and date if signature 1 is NOT empty
+            if (!document.getElementById('sig1-name-title').value.trim()) {
+                isValid = false;
+                errorMessages.push(translations['err_sig_1_name_title_required']);
+                document.getElementById('sig1-name-title').classList.add('border-red-500');
             }
-            if (!isSig2Empty) {
-                if (!document.getElementById('sig2-name-title').value.trim()) {
-                    isValid = false;
-                    errorMessages.push('Name and Title for Signature 2 is required.');
-                    document.getElementById('sig2-name-title').classList.add('border-red-500');
-                }
-                if (!document.getElementById('sig2-date').value.trim()) {
-                    isValid = false;
-                    errorMessages.push('Date for Signature 2 is required.');
-                    document.getElementById('sig2-date').classList.add('border-red-500');
-                }
+            if (!document.getElementById('sig1-date').value.trim()) {
+                isValid = false;
+                errorMessages.push(translations['err_sig_1_date_required']);
+                document.getElementById('sig1-date').classList.add('border-red-500');
+            }
+        }
+
+        // Changed logic: only validate name/title and date for signature 2 if signature 2 is NOT empty
+        if (!isSig2Empty) {
+            if (!document.getElementById('sig2-name-title').value.trim()) {
+                isValid = false;
+                errorMessages.push(translations['err_sig_2_name_title_required']);
+                document.getElementById('sig2-name-title').classList.add('border-red-500');
+            }
+            if (!document.getElementById('sig2-date').value.trim()) {
+                isValid = false;
+                errorMessages.push(translations['err_sig_2_date_required']);
+                document.getElementById('sig2-date').classList.add('border-red-500');
             }
         }
 
         if (!isValid) {
             const uniqueErrors = [...new Set(errorMessages)];
-            errorDiv.innerHTML = '<strong>Please correct the following errors:</strong><ul class="list-disc list-inside mt-2">' + uniqueErrors.map(e => `<li>${e}</li>`).join('') + '</ul>';
+            errorDiv.innerHTML = `<strong>${translations['err_correct_errors']}</strong><ul class="list-disc list-inside mt-2">` + uniqueErrors.map(e => `<li>${e}</li>`).join('') + '</ul>';
             errorDiv.classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
