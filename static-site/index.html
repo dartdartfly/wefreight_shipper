@@ -1067,10 +1067,38 @@
 
         // 1. Get signature data as PNG
         if (signaturePad1 && !signaturePad1.isEmpty()) {
-            document.getElementById('signatureData1').value = signaturePad1.toDataURL('image/png');
+            const canvas = document.getElementById('signatureCanvas1');
+    	    const ctx = canvas.getContext('2d');
+            const originalImage = ctx.getImageData(0, 0, canvas.width, canvas.height); // Save current state
+
+            // Draw white background
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the signature back on top
+            ctx.putImageData(originalImage, 0, 0);
+
+            // Get data URL with white background
+            document.getElementById('signatureData1').value = canvas.toDataURL('image/png');
+
+            // document.getElementById('signatureData1').value = signaturePad1.toDataURL('image/png');
         }
         if (signaturePad2 && !signaturePad2.isEmpty()) {
-            document.getElementById('signatureData2').value = signaturePad2.toDataURL('image/png');
+            const canvas = document.getElementById('signatureCanvas2');
+    	    const ctx = canvas.getContext('2d');
+            const originalImage = ctx.getImageData(0, 0, canvas.width, canvas.height); // Save current state
+
+            // Draw white background
+            ctx.fillStyle = '#FFFFFF';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw the signature back on top
+            ctx.putImageData(originalImage, 0, 0);
+
+            // Get data URL with white background
+            document.getElementById('signatureData2').value = canvas.toDataURL('image/png');
+
+            // document.getElementById('signatureData2').value = signaturePad2.toDataURL('image/png');
         }
         
         // 2. Collect form data
