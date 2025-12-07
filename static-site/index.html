@@ -1068,6 +1068,7 @@
         // 1. Get signature data as PNG
         if (signaturePad1 && !signaturePad1.isEmpty()) {
             // Create a temporary canvas to flatten the signature onto a white background
+            const canvas1 = document.getElementById('signatureCanvas1');
             const tempCanvas1 = document.createElement('canvas');
             tempCanvas1.width = canvas1.width;
             tempCanvas1.height = canvas1.height;
@@ -1086,6 +1087,7 @@
 
         if (signaturePad2 && !signaturePad2.isEmpty()) {
             // Create a temporary canvas to flatten the signature onto a white background
+            const canvas1 = document.getElementById('signatureCanvas2');
             const tempCanvas2 = document.createElement('canvas');
             tempCanvas2.width = canvas2.width;
             tempCanvas2.height = canvas2.height;
