@@ -1,9 +1,9 @@
 
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const { TranslationServiceClient } = require('@google-cloud/translate').v2; // Use v2 for basic text translation
+const { Translate } = require('@google-cloud/translate'); // The v2 client
 
-const translationClient = new TranslationServiceClient();
+const translationClient = new Translate();
 
 async function translateToEnglish(text) {
     if (!text || typeof text !== 'string') {
