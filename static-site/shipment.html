@@ -178,7 +178,7 @@
             const moneyPattern = new RegExp(`\\s*(?:${pattern1}|${pattern2})\\s*`, 'gi');
 
            // 移除金额 + 清理空格
-           return text.replace(moneyPattern, ' ').trim().replace(/\s+/g, ' '));
+           return text.replace(moneyPattern, ' ').trim().replace(/\s+/g, ' ');
         }
 
         /**
