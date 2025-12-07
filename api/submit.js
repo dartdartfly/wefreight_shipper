@@ -1,6 +1,62 @@
 
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const { TranslationServiceClient } = require('@google-cloud/translate').v2; // Use v2 for basic text translation
+
+const translationClient = new TranslationServiceClient();
+
+async function translateToEnglish(text) {
+    if (!text || typeof text !== 'string') {
+        return text; // Return as is if not valid text
+    }
+
+    const projectId = process.env.GOOGLE_CLOUD_PROJECT_ID || process.env.GCP_PROJECT; 
+    
+    if (!projectId) {
+        console.warn('GOOGLE_CLOUD_PROJECT_ID or GCP_PROJECT not set. Skipping actual translation and using original text.');
+        return `(Translation skipped: Google Cloud Project ID not configured)`;
+    }
+
+    try {
+        // First, detect the language of the original text
+        const [detectionResponse] = await translationClient.detectLanguage({
+            parent: `projects/${projectId}`,
+            content: text,
+        });
+
+        const detections = detectionResponse.detections;
+        let detectedLanguageCode = 'unknown';
+
+        if (detections && detections.length > 0) {
+            // Find the most confident detection
+            const mostConfidentDetection = detections.reduce((prev, current) => 
+                (prev.confidence > current.confidence) ? prev : current);
+            detectedLanguageCode = mostConfidentDetection.languageCode;
+        }
+
+        // If the detected language is English, return the original text
+        if (detectedLanguageCode === 'en') {
+            return text;
+        }
+
+        // Otherwise, proceed with translation
+        const request = {
+            parent: `projects/${projectId}`,
+            contents: [text],
+            targetLanguageCode: 'en',
+        };
+        const [translationResponse] = await translationClient.translateText(request);
+        const translation = translationResponse.translations[0];
+        return translation ? translation.translatedText : text;
+
+    } catch (error) {
+        console.error('Error during Google Translate API call (detect or translate):', error);
+        // Return a helpful message if translation fails
+        return `(Translation failed: ${error.message})`;
+    }
+}
+
+
 
 module.exports = async (req, res) => {
     if (req.method !== 'POST') {
@@ -57,7 +113,15 @@ module.exports = async (req, res) => {
                     cid,
                 });
             } else {
-                htmlBody += value;
+                // Translate non-signature user-filled content to English
+                const englishTranslation = await translateToEnglish(value);
+                // If the translation is different from the original, append both.
+                // Otherwise (content was already English), just append the original.
+                if (englishTranslation !== value) {
+                    htmlBody += `${value}<br/>//English Translation of Original<br/>${englishTranslation}`;
+                } else {
+                    htmlBody += value;
+                }
             }
 
             htmlBody += `</td>
