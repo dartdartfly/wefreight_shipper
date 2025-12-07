@@ -169,10 +169,10 @@
             const numberPattern = '\\d{1,3}(?:,\\d{3})*(?:\\.\\d{1,2})?'; // e.g., 1,234.56 or 123.45
 
             // Pattern for "CurrencySymbol/Code Number"
-            const pattern1 = `(?:${currencySymbols}|${currencyCodes})\\s*${numberPattern}`;
+            const pattern1 = `(?:${currencySymbols}|${currencyCodes})${numberPattern}`;
 
             // Pattern for "Number CurrencySymbol/Code"
-            const pattern2 = `${numberPattern}\\s*(?:${currencySymbols}|${currencyCodes})`;
+            const pattern2 = `${numberPattern}(?:${currencySymbols}|${currencyCodes})`;
 
             const moneyPattern = new RegExp(`\\b(?:${pattern1}|${pattern2})\\b`, 'gi');
             
