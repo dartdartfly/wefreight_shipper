@@ -1,9 +1,9 @@
 
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
-const Translate = require('@google-cloud/translate'); // Assuming Translate is the module's default export or the module itself is the constructor
+const { TranslationServiceClient } = require('@google-cloud/translate').v3;
 
-const translationClient = new Translate();
+const translationClient = new TranslationServiceClient();
 
 async function translateToEnglish(text) {
     if (!text || typeof text !== 'string') {
