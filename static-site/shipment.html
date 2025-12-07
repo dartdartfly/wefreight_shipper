@@ -166,8 +166,6 @@
 
            
             // 移除匹配到的钱数字符串
-            return text.replace(moneyPattern, '').trim();
-
             const currencySymbols = '[€$¥£￥\\u00A5\\uFFE5]';
             const currencyCodes = '(USD|CAD|RMB|元|块|dollar|euro)';
             const numberPattern = '[0-9]{1,10}(?:,[0-9]{1,10})*(?:\\.[0-9]{1,10})?';
