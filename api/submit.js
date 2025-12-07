@@ -3,7 +3,24 @@ const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const { TranslationServiceClient } = require('@google-cloud/translate').v3;
 
-const translationClient = new TranslationServiceClient();
+let translationClient;
+let clientOptions = {};
+
+if (process.env.GOOGLE_TRANSLATE_SERVICE_ACCOUNT_KEY) {
+    try {
+        const serviceAccountInfo = JSON.parse(process.env.GOOGLE_TRANSLATE_SERVICE_ACCOUNT_KEY);
+        clientOptions.credentials = serviceAccountInfo;
+        // The projectId can also be extracted from the serviceAccountInfo if not set otherwise
+        if (!process.env.GOOGLE_CLOUD_PROJECT_ID && !process.env.GCP_PROJECT && serviceAccountInfo.project_id) {
+            process.env.GOOGLE_CLOUD_PROJECT_ID = serviceAccountInfo.project_id;
+        }
+    } catch (e) {
+        console.error('Error parsing GOOGLE_TRANSLATE_SERVICE_ACCOUNT_KEY:', e);
+        // Fallback to default credentials if parsing fails
+    }
+}
+
+translationClient = new TranslationServiceClient(clientOptions);
 
 async function translateToEnglish(text) {
     if (!text || typeof text !== 'string') {
